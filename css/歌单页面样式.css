@@ -1,0 +1,46 @@
+.gedanindex_ul li{
+	float: left;
+}
+.gedanindex_ul{
+	width: 400px;
+	height: 20px;
+}
+.border_red{
+	border: 1px solid red;
+	color: red;
+}
+.gedanindex_ul img{
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+}
+.text_max{
+	width: 100px;
+	height: 20px;
+	overflow: hidden;
+}
+.gedanshouchangperson_ul{
+	float: left;
+	width: 45%;
+	height: 130px;
+	margin-left: 40px;
+}
+.gedanshouchangperson_img{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+}
+.gedanshouchangperson_p1{
+	margin-top: 40px;
+}
+.gedanshouchangperson_li1{
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+.gedanshouchangperson_li2{
+	width: 70px;
+	height: 70px;
+	float: left;
+	margin-left: 30px;
+}

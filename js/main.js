@@ -1,0 +1,578 @@
+var vm =new Vue({
+	el:"#app",
+	data:{
+		/*搜索内容*/
+		title:"",
+		/*歌手*/ 
+		person:"歌手",
+		/*专辑*/ 
+		zhuanji:"专辑",
+		/*歌曲时长*/
+		time:"时长",
+		/*音乐id*/
+		musizId:"",
+		/*音乐地址*/
+		musiz:"",
+		/*音乐图片*/
+		musizimg:"",
+		/*音乐搜索列表*/
+		list:[],
+		/*音乐搜索歌手列表id存放*/
+		SearchPerson2:[],
+		/*音乐搜索MV地址存放*/
+		SearchlistMV:"",
+		/*搜索专辑列表*/
+		SearchZhuanji2:[],
+		/*搜索视频结果存放列表*/
+		SearchMV2:[],
+		/*搜索歌单结果存放列表*/
+		SearchGedan2:[],
+		/*搜索歌词结果存放列表*/
+		SearchGechi2:[],
+		/*搜索电台结果存放列表*/
+		SearchDianTai2:[],
+		/*搜索用户存放列表*/
+		SearchName2:[],
+		/*搜索没有结果*/
+		SearchErr:"没有结果",
+		/*搜索文字红色下滑线样式控制*/
+		SearchRed:"0",
+		/*视频播放地址*/
+		MVDiZhi:"",
+		/*视频热门评论*/
+		MVPinlunhot:[],
+		/*视频最新评论*/
+		MVPinlunNew:[],
+		/*视频信息存放*/
+		MVneilong:[],
+		/*视频标题*/
+		MVtitle:"",
+		/*相关视频列表存放*/
+		MVXiangGuan:[],
+		/*控制视频作者头像*/
+		ShiPingImg:false,
+		/*控制MV作者头像*/
+		MVImg:false,
+		/*控制图片旋转*/
+		isplaying:true,
+		/*控制歌手页面的切换*/
+		personred:"1",
+		/*控制加载中显示*/
+		loading:false,
+		/*歌手详情列表存放*/
+		personMain:[],
+		/*控制歌手页面显示开关*/
+		personIndexSwitch:false,
+		/*控制搜索页面显示开关*/
+		SearchIndexSwitch:true,
+		/*获取歌手热门50首列表*/
+		PersonHot:[],
+		/*歌手页面专题列表*/
+		PersonZhuanJi:[],
+		/*歌手页面MV列表*/
+		PersonIndexMV:[],
+		/*歌手详情列表*/
+		personmeg:[],
+		/*歌手页面歌手头像*/
+		personimgsrc:"",
+		/*歌手页面相似歌手*/
+		personsimi:[],
+		/*发现音乐页面top部分变红*/
+		faxianIndextopred:"1",
+		/*发现音乐轮播存放*/
+		faxianlunbo:[],
+		/*专辑页面切换*/
+		zhuanjiindexred:1,
+		/*专辑页面开关*/
+		zhuanjiIndexSwitch:false,
+		/*专辑音乐列表存放*/
+		zhuanjilistmusiz:[],
+		/*专辑信息存放*/
+		zhuanjimain:[],
+		/*专辑评论数量*/
+		zhuanjipinlunnumber:0,
+		/*专辑评论列表*/
+		zhuanjipinlunlist:[],
+		/*歌单页面显示控制*/
+		gedanIndexSwitch:false,
+		/*歌单下划线变红控制*/
+		gedanindexred:1,
+		/*歌单信息列表*/
+		gedanmain:[],
+		/*歌单评论列表*/
+		gedancomment:[],
+		/*歌单评论数量*/
+		gedancommentnumber:0,
+		/*歌单页面音乐列表*/
+		gedanmusizlist:[],
+		/*歌单收藏者*/
+		gedansouchangperson:[],
+	},
+	
+	methods:{
+		/*播放音乐*/
+		play:function(index){
+			var that=this;
+			axios.get("https://autumnfish.cn/song/url?id="+index)
+			.then(function(response){
+				if(response.data.data[0].url===null){
+					window.alert("播放失败");
+				}else{
+					that.musiz=response.data.data[0].url;
+					axios.get("https://autumnfish.cn/song/detail?ids="+index)
+					.then(function(response){
+						that.musizimg = response.data.songs[0].al.picUrl;
+					},function(err){})
+				}
+			},function(err){})
+		},
+		/*搜索音乐*/
+		searchMusiz:function(){
+			var that=this;
+			this.loading=true;
+			this.personIndexSwitch=false;
+			this.SearchIndexSwitch=true;
+			this.list=[];
+			
+			axios.get("https://autumnfish.cn/search?limit=100&keywords="+this.title)
+			.then(function(response){
+				that.list=response.data.result.songs;
+				that.loading=false;
+			},function(err){
+				console.log('请求失败');
+			});
+			that.SearchPerson2.splice(0,that.SearchPerson2.length);
+			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+			that.SearchMV2.splice(0,that.SearchMV2.length);
+			that.SearchGedan2.splice(0,that.SearchGedan2.length);
+			that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+			that.SearchName2.splice(0,that.SearchName2.length);
+			that.SearchGechi2.splice(0,that.SearchGechi2.length);
+			
+			this.MVDiZhi="";
+			this.ShiPingImg=false;
+			this.MVImg=false;
+			this.SearchRed=1;
+		},
+		/*搜索歌手*/
+		SearchPerson:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=100&keywords="+this.title)
+			.then(function(response){
+				that.SearchPerson2=response.data.result.artists;
+				that.loading=false;
+			},function(err){});
+			that.list.splice(0,that.list.length);
+			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+			that.SearchMV2.splice(0,that.SearchMV2.length);
+			that.SearchGedan2.splice(0,that.SearchGedan2.length);
+			that.SearchGechi2.splice(0,that.SearchGechi2.length);
+			that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+			that.SearchName2.splice(0,that.SearchName2.length);
+				
+			this.SearchRed=2;
+			},		
+		/*搜索专辑*/
+		SearchZhuanji:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=10&keywords="+this.title)
+			.then(function(response){
+				that.SearchZhuanji2=response.data.result.albums;
+				that.loading=false;
+			},function(err){
+				console.log('请求失败');
+			});
+			that.list.splice(0,that.list.length);
+			that.SearchPerson2.splice(0,that.SearchPerson2.length);
+			that.SearchMV2.splice(0,that.SearchMV2.length);
+			that.SearchGedan2.splice(0,that.SearchGedan2.length);
+			that.SearchGechi2.splice(0,that.SearchGechi2.length);
+			that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+			that.SearchName2.splice(0,that.SearchName2.length);
+			this.SearchRed=3;
+		},
+		/*搜索视频*/
+		SearchMV:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=1014&keywords="+this.title)
+			.then(function(response){
+				that.SearchMV2=response.data.result.videos;
+				that.loading=false;
+		},function(err){
+			console.log('请求失败');
+		});
+		that.list.splice(0,that.list.length);
+		that.SearchPerson2.splice(0,that.SearchPerson2.length);
+		that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+		that.SearchGedan2.splice(0,that.SearchGedan2.length);
+		that.SearchGechi2.splice(0,that.SearchGechi2.length);
+		that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+		that.SearchName2.splice(0,that.SearchName2.length);
+		this.SearchRed=4;
+		},
+		/*搜索歌单*/
+		SearchGedan:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=1000&keywords="+this.title)
+			.then(function(response){
+				that.SearchGedan2=response.data.result.playlists;
+				that.loading=false;
+			},function(err){
+				console.log('请求失败');
+			});
+		that.list.splice(0,that.list.length);
+		that.SearchPerson2.splice(0,that.SearchPerson2.length);
+		that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+		that.SearchMV2.splice(0,that.SearchMV2.length);
+		that.SearchGechi2.splice(0,that.SearchGechi2.length);
+		that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+		that.SearchName2.splice(0,that.SearchName2.length);
+		this.SearchRed=5;
+		},
+		/*搜索歌词*/
+		SearchGechi:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=1006&keywords="+this.title)
+			.then(function(response){
+				that.SearchGechi2=response.data.result.songs;
+				that.loading=false;
+			},function(err){});
+			that.list.splice(0,that.list.length);
+			that.SearchPerson2.splice(0,that.SearchPerson2.length);
+			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+			that.SearchMV2.splice(0,that.SearchMV2.length);
+			that.SearchGedan2.splice(0,that.SearchGedan2.length);
+			that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+			that.SearchName2.splice(0,that.SearchName2.length);
+			this.SearchRed=6;
+		},
+		/*搜索电台*/
+		SearchDianTai:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=1009&keywords="+this.title)
+			.then(function(response){
+				that.SearchDianTai2=response.data.result.djRadios;
+				that.loading=false;
+			},function(err){})
+			that.list.splice(0,that.list.length);
+			that.SearchPerson2.splice(0,that.SearchPerson2.length);
+			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+			that.SearchMV2.splice(0,that.SearchMV2.length);
+			that.SearchGechi2.splice(0,that.SearchGechi2.length);
+			that.SearchGedan2.splice(0,that.SearchGedan2.length);
+			that.SearchName2.splice(0,that.SearchName2.length);
+			this.SearchRed=7;
+		},
+		/*搜索用户*/
+		SearchName:function(){
+			var that=this;
+			this.loading=true;
+			axios.get("https://autumnfish.cn/search?limit=100&type=1004&keywords="+this.title)
+			.then(function(response){
+				that.SearchName2=response.data.result.mvs;
+				that.loading=false;
+			},function(err){});
+			that.list.splice(0,that.list.length);
+			that.SearchPerson2.splice(0,that.SearchPerson2.length);
+			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
+			that.SearchMV2.splice(0,that.SearchMV2.length);
+			that.SearchGedan2.splice(0,that.SearchGedan2.length);
+			that.SearchGechi2.splice(0,that.SearchGechi2.length);
+			that.SearchDianTai2.splice(0,that.SearchDianTai2.length);
+			this.SearchRed=8;
+			
+			},
+		/*播放视频*/
+		PlayMV:function(MVid){
+			/*视频播放器*/
+			var that=this;
+			axios.get("https://autumnfish.cn/video/url?id="+MVid)
+			.then(function(response){
+				that.MVDiZhi=response.data.urls[0].url;
+				// console.log(that.MVDiZhi);
+			},function(err){})
+			/*视频详细信息*/
+			axios.get("https://autumnfish.cn/video/detail?id="+MVid)
+			.then(function(response){
+				that.MVneilong=response.data.data;
+				that.MVtitle=that.MVneilong.creator.nickname;
+				// console.log(that.MVneilong);
+			},function(err){})
+			/*视频热门评论*/
+			axios.get("https://autumnfish.cn/comment/new?&sortType=2&type=5&id="+MVid)
+			.then(function(response){
+				that.MVPinlunhot=response.data.data.comments;
+				// console.log(that.MVPinlunhot);
+			},function(err){})
+			/*视频最新评论*/
+			axios.get("https://autumnfish.cn/comment/new?&sortType=3&type=5&id="+MVid)
+			.then(function(response){
+				that.MVPinlunNew=response.data.data.comments;
+				// console.log(that.MVPinlunNew);
+			},function(err){})
+			/*相关视频*/
+			axios.get("https://autumnfish.cn/related/allvideo?id="+MVid)
+			.then(function(response){
+				that.MVXiangGuan=response.data.data;
+				console.log(that.MVXiangGuan);
+			},function(err){})
+			
+			this.ShiPingImg=true;
+			this.MVImg=false;
+		},
+		/*关掉视频*/
+		MVOff:function(){
+			this.MVDiZhi="";
+			this.ShiPingImg=false;
+			this.MVImg=false;
+		},
+		/*播放MV*/
+		PlayMV2:function(MVid2){
+			var that=this;
+			/*获取MV地址*/
+			axios.get("https://autumnfish.cn/mv/url?id="+MVid2)
+			.then(function(response){
+				that.MVDiZhi=response.data.data.url;
+				// console.log(that.MVDiZhi);
+			},function(err){})			
+			/*视频详细信息*/
+			axios.get("https://autumnfish.cn/mv/detail?mvid="+MVid2)
+			.then(function(response){
+				that.MVneilong=response.data.data;
+				that.MVtitle=that.MVneilong.artistName;
+				// console.log(that.MVneilong);
+			},function(err){})
+			/*视频热门评论*/
+			axios.get("https://autumnfish.cn/comment/new?&sortType=2&type=1&id="+MVid2)
+			.then(function(response){
+				that.MVPinlunhot=response.data.data.comments;
+				// console.log(that.MVPinlunhot);
+			},function(err){})
+			/*视频最新评论*/
+			axios.get("https://autumnfish.cn/comment/new?&sortType=3&type=1&id="+MVid2)
+			.then(function(response){
+				that.MVPinlunNew=response.data.data.comments;
+				// console.log(that.MVPinlunNew);
+			},function(err){})
+			/*相关视频*/
+			axios.get("https://autumnfish.cn/related/allvideo?id="+MVid2)
+			.then(function(response){
+				that.MVXiangGuan=response.data.data;
+				console.log(that.MVXiangGuan);
+				console.log("相关视频");
+			},function(err){})
+			
+			this.ShiPingImg=false;
+			this.MVImg=true;
+		},
+		/*暂停播放音乐*/
+		pause2:function(){
+			var x=document.getElementById("YingYue");
+			x.pause();
+		},
+		/*获取歌手页面*/
+		personindex:function(id,imgsrc){
+			var that=this;
+			
+			/*获取歌手信息*/
+			axios.get("https://autumnfish.cn/artist/album"+"?id="+id+"&limit=50")
+			.then(function(response){
+				that.personMain=response.data;
+				/*获取歌手专辑的歌曲列表*/
+				that.personIndexSwitch=true;
+				that.SearchIndexSwitch=false;
+				that.zhuanjiIndexSwitch=false;
+				that.personimgsrc=imgsrc;
+				that.personred=1;
+				for(let i=0; i<that.personMain.hotAlbums.length;i++){
+					axios.get("https://autumnfish.cn/album?id="+that.personMain.hotAlbums[i].id)
+								.then(function(response2){
+									that.PersonZhuanJi[i]=response2;
+								},function(err){console.log("错误")})
+				}
+			},function(err){})
+			
+			
+			
+			/*获取歌手热门50首歌曲*/
+			axios.get("https://autumnfish.cn/artist/top/song?id="+id)
+			.then(function(response){
+				that.PersonHot=response.data.songs;
+			},function(err){})
+			
+			/*获取歌手MV信息*/
+			axios.get("https://autumnfish.cn/artist/mv",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.PersonIndexMV=response.data.mvs;
+			},function(err){})
+			
+			/*获取歌手描述*/
+			axios.get("https://autumnfish.cn/artist/desc",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.personmeg=response.data;
+			},function(err){})
+			
+			/*获取相似歌手*/
+			axios.get("https://autumnfish.cn/simi/artist",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.personsimi=response.data.artists;
+			},function(err){})
+		},
+		/*关闭歌手页*/
+		PersonOff:function(){
+			this.personIndexSwitch=false;
+			this.SearchIndexSwitch=true;
+		},
+		/*喜欢变红*/
+		RedGo:function(item,index){
+			if(item.active){
+				Vue.set(item,'active',false);
+			}else{
+				Vue.set(item,'active',true);
+			}
+		},
+		/*载入个性推荐的轮播图*/
+		goimg:function(){
+			var that=this;
+			axios.get("https://autumnfish.cn/homepage/block/page")
+			.then(function(response){
+				that.faxianlunbo=response.data.data.blocks[0].extInfo.banners;
+			},function(err){})
+		},
+		/*请求专辑页面数据*/
+		zhuanjiget:function(id){
+			var that=this;
+			this.zhuanjiIndexSwitch=true;
+			this.SearchIndexSwitch=false;
+			/*专辑详细数据*/
+			axios.get("https://autumnfish.cn/album",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.zhuanjimain=response;
+				console.log(that.zhuanjimain);
+			},function(err){})
+			/*获取专辑评论数*/
+			axios.get("https://autumnfish.cn/album/detail/dynamic",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.zhuanjipinlunnumber=response.data.commentCount;
+			},function(err){})
+			/*获取专辑评论*/
+			axios.get("https://autumnfish.cn/comment/album",{
+				params:{
+					id:id,
+					limit:10
+				}
+			})
+			.then(function(response){
+				that.zhuanjipinlunlist=response.data;
+			},function(err){})
+		},
+		/*关闭专辑页面*/
+		zhuanjioff:function(){
+			this.zhuanjiIndexSwitch=false;
+			this.SearchIndexSwitch=true;
+		},
+		/*获取歌单信息*/
+		gedanget:function(id){
+			var that=this;
+			/*歌单信息*/
+			axios.get("https://autumnfish.cn/playlist/detail",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.gedanmain=response.data;
+				/*歌单歌曲列表*/
+				for(let u=0; u<10;u++){
+					axios.get("https://autumnfish.cn/song/detail?ids="+that.gedanmain.playlist.trackIds[u].id)
+								.then(function(response2){
+									that.gedanmusizlist[u]=response2;
+								},function(err){console.log("错误")})
+				}
+			},function(err){})
+			console.log(that.gedanmusizlist);
+			/*歌单评论*/
+			axios.get("https://autumnfish.cn/comment/playlist",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.gedancomment=response.data;
+			},function(err){})
+			/*歌单评论数量*/
+			axios.get("https://autumnfish.cn/playlist/detail/dynamic",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.gedancommentnumber=response.data.playlist.commentCount;
+			},function(err){})
+			/*歌单收藏者*/
+			axios.get("https://autumnfish.cn/playlist/subscribers",{
+				params:{
+					id:id
+				}
+			})
+			.then(function(response){
+				that.gedansouchangperson=response.data;
+			},function(err){})
+			
+			this.SearchIndexSwitch=false;
+			this.gedanIndexSwitch=true;
+		},
+		/*关闭歌单页面*/
+		gedanoff:function(){
+			this.SearchIndexSwitch=true;
+			this.gedanIndexSwitch=false;
+		}
+	},
+	mounted:function() {  //自动触发函数
+		this.goimg()
+	}
+});
+/*
+axios.get("https://autumnfish.cn",{
+	params:{
+		
+	}
+})
+.then(function(response){
+	console.log(response);
+},function(err){})
+*/
+
+var swiper = new Swiper('.swiper-container', {
+	        pagination: '.swiper-pagination',
+	        paginationClickable: '.swiper-pagination',
+	        nextButton: '.swiper-button-next',
+	        prevButton: '.swiper-button-prev',
+	        spaceBetween: 30
+	    });

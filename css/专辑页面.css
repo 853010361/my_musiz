@@ -1,0 +1,49 @@
+.zhuanjiindex_top{
+	width: 100%;
+	height: 300px;
+}
+.zhuanjiindex_top_div1{
+	float: left;
+	width: 20%;
+}
+.zhuanjiindex_top_div2{
+	float: left;
+	width: 70%;
+	margin-left: 10px;
+	margin-top: 20px;
+}
+.zhuanjiindex_top_div2 p:nth-child(1){
+	float: left;
+	border: 1px solid red;
+	width: 3em;
+	color: red;
+	font-size: 20px;
+}
+.zhuanjiindex_top_div2 p:nth-child(2){
+	font-size: 20px;
+}
+.zhuanjiindex_top_div2 p:nth-child(3){
+	position: absolute;
+	top: 100px;
+}
+.zhuanjiindex_top_div2 p:nth-child(3){
+	color: #55ffff;
+}
+.zhuanjiindex_musizlist{
+	margin-top: 20px;
+}
+.zhuanji_jieshao_title{
+font-weight: 900;
+}
+.zhuanjiindex_ul li:nth-child(2){
+	width: 100px;
+}
+.zhuanjipinlun_hot{
+	font-size: 20px;
+	margin-top: 20px;
+}
+.zhuanjiindex_tr td:nth-child(1),
+.zhuanjiindex_tr td:nth-child(2),
+.zhuanjiindex_tr td:nth-child(3){
+	width: 40px;
+}

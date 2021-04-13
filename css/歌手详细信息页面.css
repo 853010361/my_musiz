@@ -1,0 +1,161 @@
+/* 歌手信息页面 */
+.person_first{
+	font-size: 30px;
+	margin-left: 20px;
+}
+.person_first:hover,
+.person_simi_img:hover,
+.person_mv_li:hover,
+.MV_right_li{
+	cursor: pointer;
+}
+		.person_img{
+			height: 200px;
+			width: 200px;
+			border-radius: 20px;
+			margin-top: 20px;
+			margin-left: 20px;
+			float: left;
+		}
+		.person_div{
+			float: left;
+			margin-left: 30px;
+			margin-top: 30px;
+		}
+		.person_name{
+			font-size: 20px;
+			font-weight: 800;
+		}
+		.person_div div{
+			width: 100%;
+			height: 40px;
+		}
+		.person_name2{
+			float: left;
+			width: 100px;
+		}
+		.person_p{
+			float: left;
+			margin-left: 50px;
+		}
+		.person_p2{
+			margin-left: 0;
+		}
+		.person_top{
+			width: 100%;
+			height: 260px;
+		}
+		.person_two{
+			width: 100%;
+			height: 30px;
+		}
+		.person_ul li{
+			float: left;
+			width: 4em;
+			margin-left: 20px;
+			text-align: center;
+		}
+		.person_ul{
+			height: 30px;
+		}
+		.person_ul li:hover,
+		.DianJi:hover{
+			cursor: pointer;
+		}
+		/* 专辑部分样式 */
+		.person_zhuanji_img{
+			width: 170px;
+			height: 170px;
+			border-radius: 10px;
+			margin-left: 30px;
+			margin-top: 40px;
+			float: left;
+		}
+		.person_three{
+			width: 100%;
+			height: 300px;
+			float: left;
+			margin-top: 100px;
+		}
+		.person_three_title{
+			font-size: 20px;
+		}
+		.person_three_first{
+			width: 100%;
+			height: 300px;
+		}
+		.person_three_list{
+			margin-top: 40px;
+			width: 70%;
+			float: left;
+			margin-left: 50px;
+		}
+		.person_three_list tr{
+			width: 100%;
+			height: 15px;
+		}
+		.person_three_list td:nth-child(1),
+		.person_three_list td:nth-child(2),
+		.person_three_list td:nth-child(3){
+			width: 30px;
+		}
+		.person_three_list td:nth-child(3){
+			font-size: 20px;
+		}
+		.person_three_list td:nth-child(4){
+			width: 300px;
+		}
+		.person_three_list tr:nth-child(odd){
+			background-color: #cecece;
+		}
+		/*变红*/
+		.BianRed{
+			color: red;
+		}
+		/*歌手页MV页*/
+		.person_mv_img{
+			width: 90%;
+			height: 150px;
+			border-radius: 5px;
+		}
+		.person_mv_li{
+			float: left;
+			width: 30%;
+			margin-top: 30px;
+			margin-left: 20px;
+		}
+		.person_mv_p{
+			margin-top: 5px;
+		}
+		.person_meg{
+			width: 80%;
+			margin-left: 30px;
+		}
+		.person_meg_title{
+			font-weight: bolder;
+			font-size: 15px;
+		}
+		.person_meg_text{
+			text-indent: 2em;
+			line-height: 2.5;
+			word-wrap: break-word;
+		}
+		.person_simi_img{
+			width: 100%;
+			height: 150px;
+		}
+		.person_simi{
+			float: left;
+			width: 15%;
+			margin-left: 20px;
+			margin-top: 20px;
+		}
+		.person_simi_name{
+			font-size: 10px;
+			margin-top: 10px;
+			font-weight: 700;
+		}
+		.person_null{
+			font-size: 50px;
+			margin-left: 20px;
+		}
