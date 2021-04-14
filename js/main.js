@@ -33,12 +33,12 @@ var vm =new Vue({
 		SearchDianTai2:[],
 		/*搜索用户存放列表*/
 		SearchName2:[],
-		/*搜索没有结果*/
-		SearchErr:"没有结果",
+		/*没有搜索结果*/
+		searchnull:false,
 		/*搜索文字红色下滑线样式控制*/
 		SearchRed:"0",
-		/*视频播放地址*/
-		MVDiZhi:"",
+		/*视频播放页开关*/
+		MVindex:false,
 		/*视频热门评论*/
 		MVPinlunhot:[],
 		/*视频最新评论*/
@@ -64,7 +64,7 @@ var vm =new Vue({
 		/*控制歌手页面显示开关*/
 		personIndexSwitch:false,
 		/*控制搜索页面显示开关*/
-		SearchIndexSwitch:true,
+		SearchIndexSwitch:false,
 		/*获取歌手热门50首列表*/
 		PersonHot:[],
 		/*歌手页面专题列表*/
@@ -77,10 +77,6 @@ var vm =new Vue({
 		personimgsrc:"",
 		/*歌手页面相似歌手*/
 		personsimi:[],
-		/*发现音乐页面top部分变红*/
-		faxianIndextopred:"1",
-		/*发现音乐轮播存放*/
-		faxianlunbo:[],
 		/*专辑页面切换*/
 		zhuanjiindexred:1,
 		/*专辑页面开关*/
@@ -111,8 +107,26 @@ var vm =new Vue({
 		loadingindex:false,
 		/*读取失败*/
 		loadingerr:false,
-		/*没有搜索结果*/
-		searchnull:false,
+		/*发现音乐页面top部分变红*/
+		faxianIndextopred:"1",
+		/*发现音乐轮播存放*/
+		faxianlunbo:[],
+		/*个性推荐列表*/
+		gexingtuijianlist:[],
+		/*个性推荐轮播图*/
+		gexingtuijianlunbo:[],
+		/*左边排列选中器*/
+		leftgo:1,
+		/*音乐播放器显示控制*/
+		musizswitch:true,
+		/*推荐歌单*/
+		tuijiangedan:[],
+		/*轮播图显示隐藏*/
+		lunboswitch:true,
+		/*独家放送*/
+		dujiafangsonglist:[],
+		/*最新音乐*/
+		zuixinmusizlist:[],
 	},
 	
 	methods:{
@@ -121,8 +135,8 @@ var vm =new Vue({
 			var that=this;
 			axios.get("https://autumnfish.cn/song/url?id="+index)
 			.then(function(response){
-				if(response.data.data[0].url===null){
-					window.alert("播放失败");
+				if(response.data.data[0].url==null){
+					window.alert("歌曲不存在");
 				}else{
 					that.musiz=response.data.data[0].url;
 					axios.get("https://autumnfish.cn/song/detail?ids="+index)
@@ -141,6 +155,9 @@ var vm =new Vue({
 			this.SearchIndexSwitch=true;
 			this.list=[];
 			this.searchnull=false;
+			this.zhuanjiIndexSwitch=false;
+			this.gedanIndexSwitch=false;
+			this.leftgo=0;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&keywords="+this.title)
 			.then(function(response){
@@ -174,6 +191,7 @@ var vm =new Vue({
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=100&keywords="+this.title)
 			.then(function(response){
@@ -204,6 +222,7 @@ var vm =new Vue({
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=10&keywords="+this.title)
 			.then(function(response){
@@ -233,6 +252,8 @@ var vm =new Vue({
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1014&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.videos == undefined){
@@ -260,6 +281,8 @@ var vm =new Vue({
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1000&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.playlists == undefined){
@@ -288,6 +311,7 @@ var vm =new Vue({
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1006&keywords="+this.title)
 			.then(function(response){
@@ -312,11 +336,20 @@ var vm =new Vue({
 			that.SearchName2.splice(0,that.SearchName2.length);
 			this.SearchRed=6;
 		},
+		/*展开歌词*/
+		GechiGo:function(item,index){
+			if(item.active==false){
+				Vue.set(item,'active',true);
+			}else{
+				Vue.set(item,'active',false);
+			}
+		},
 		/*搜索电台*/
 		SearchDianTai:function(){
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1009&keywords="+this.title)
 			.then(function(response){
@@ -346,6 +379,7 @@ var vm =new Vue({
 			var that=this;
 			this.loading=true;
 			this.searchnull=false;
+			this.leftgo=0;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1004&keywords="+this.title)
 			.then(function(response){
@@ -371,10 +405,13 @@ var vm =new Vue({
 			this.SearchRed=8;
 			
 			},
-		/*播放视频*/
+		/*打开视频*/
 		PlayMV:function(MVid){
 			/*视频播放器*/
 			var that=this;
+			this.musizswitch=false;
+			this.lunboswitch=false;
+			this.musizswitch=false;
 			axios.get("https://autumnfish.cn/video/url?id="+MVid)
 			.then(function(response){
 				that.MVDiZhi=response.data.urls[0].url;
@@ -403,26 +440,28 @@ var vm =new Vue({
 			axios.get("https://autumnfish.cn/related/allvideo?id="+MVid)
 			.then(function(response){
 				that.MVXiangGuan=response.data.data;
-				console.log(that.MVXiangGuan);
 			},function(err){})
 			
 			this.ShiPingImg=true;
 			this.MVImg=false;
 		},
-		/*关掉视频*/
-		MVOff:function(){
-			this.MVDiZhi="";
-			this.ShiPingImg=false;
-			this.MVImg=false;
-		},
-		/*播放MV*/
+		/*打开mv页面*/
 		PlayMV2:function(MVid2){
 			var that=this;
+			this.lunboswitch=false;
+			this.loadingindex=true;
+			this.MVindex=true;
+			this.musizswitch=false;
 			/*获取MV地址*/
 			axios.get("https://autumnfish.cn/mv/url?id="+MVid2)
 			.then(function(response){
-				that.MVDiZhi=response.data.data.url;
-				// console.log(that.MVDiZhi);
+				if(response.data.data.url==null){
+					window.alert("视频不存在");
+				}else{
+					that.MVDiZhi=response.data.data.url;
+					that.loadingindex=false;
+				}
+				
 			},function(err){})			
 			/*视频详细信息*/
 			axios.get("https://autumnfish.cn/mv/detail?mvid="+MVid2)
@@ -447,8 +486,6 @@ var vm =new Vue({
 			axios.get("https://autumnfish.cn/related/allvideo?id="+MVid2)
 			.then(function(response){
 				that.MVXiangGuan=response.data.data;
-				console.log(that.MVXiangGuan);
-				console.log("相关视频");
 			},function(err){})
 			
 			this.ShiPingImg=false;
@@ -459,12 +496,11 @@ var vm =new Vue({
 			var x=document.getElementById("YingYue");
 			x.pause();
 		},
-		/*获取歌手页面*/
+		/*打开歌手页面*/
 		personindex:function(id,imgsrc){
 			var that=this;
 			this.loadingindex=true;
-			this.SearchIndexSwitch=false;
-			this.zhuanjiIndexSwitch=false;
+			this.lunboswitch=false;
 			/*获取歌手信息*/
 			axios.get("https://autumnfish.cn/artist/album"+"?id="+id+"&limit=50")
 			.then(function(response){
@@ -481,14 +517,11 @@ var vm =new Vue({
 				}))
 				.then(axios.spread(function(){
 					that.PersonZhuanJi=arguments;
-					console.log(that.PersonZhuanJi);
 					
 					that.personIndexSwitch=true;
 					that.loadingindex=false;
 				}))
 			},function(err){})
-			
-			
 			
 			/*获取歌手热门50首歌曲*/
 			axios.get("https://autumnfish.cn/artist/top/song?id="+id)
@@ -526,32 +559,19 @@ var vm =new Vue({
 				that.personsimi=response.data.artists;
 			},function(err){})
 		},
-		/*关闭歌手页*/
-		PersonOff:function(){
-			this.personIndexSwitch=false;
-			this.SearchIndexSwitch=true;
-		},
 		/*喜欢变红*/
-		RedGo:function(item,index){
-			if(item.active){
-				Vue.set(item,'active',false);
+		RedGo:function(item){
+			if(item.kongzi){
+				Vue.set(item,'kongzi',false);
 			}else{
-				Vue.set(item,'active',true);
+				Vue.set(item,'kongzi',true);
 			}
 		},
-		/*载入个性推荐的轮播图*/
-		goimg:function(){
-			var that=this;
-			axios.get("https://autumnfish.cn/homepage/block/page")
-			.then(function(response){
-				that.faxianlunbo=response.data.data.blocks[0].extInfo.banners;
-			},function(err){})
-		},
-		/*打开专辑页面数据*/
+		/*打开专辑页面*/
 		zhuanjiget:function(id){
 			var that=this;
+			this.lunboswitch=false;
 			this.zhuanjiIndexSwitch=true;
-			this.SearchIndexSwitch=false;
 			this.loading=true;
 			/*专辑详细数据*/
 			axios.get("https://autumnfish.cn/album",{
@@ -585,16 +605,11 @@ var vm =new Vue({
 			
 			this.loadingindex=false;
 		},
-		/*关闭专辑页面*/
-		zhuanjioff:function(){
-			this.zhuanjiIndexSwitch=false;
-			this.SearchIndexSwitch=true;
-		},
-		/*获取歌单信息*/
+		/*打开歌单页面*/
 		gedanget:function(id){
 			var that=this;
-			this.SearchIndexSwitch=false;
 			this.loadingindex=true;
+			this.lunboswitch=false;
 			/*歌单信息*/
 			axios.get("https://autumnfish.cn/playlist/detail",{
 				params:{
@@ -605,8 +620,11 @@ var vm =new Vue({
 				that.gedanmain=response.data;
 				/*歌单歌曲列表*/
 				var arr1 = new Array;
-				for(let i=0; i<20;i++){
-					arr1[i] = "https://autumnfish.cn/song/detail?ids="+that.gedanmain.playlist.trackIds[i].id
+				for(let i=0; i<50;i++){
+					if(that.gedanmain.playlist.trackIds[i] == undefined){
+					}else{
+						arr1[i] = "https://autumnfish.cn/song/detail?ids="+that.gedanmain.playlist.trackIds[i].id
+					}
 				}
 				axios.all(arr1.map(function(data){
 					return axios.get(data);
@@ -614,8 +632,9 @@ var vm =new Vue({
 				.then(axios.spread(function(){
 					var arr2 = new Array;
 					that.gedanmusizlist = arguments;
+					that.loadingindex=false;
+					that.gedanIndexSwitch=true;
 				}))
-				
 			},function(err){})
 			
 			/*歌单评论*/
@@ -645,19 +664,45 @@ var vm =new Vue({
 			.then(function(response){
 				that.gedansouchangperson=response.data;
 			},function(err){})
-			
-			this.loadingindex=false;
-			this.SearchIndexSwitch=false;
-			this.gedanIndexSwitch=true;
 		},
-		/*关闭歌单页面*/
-		gedanoff:function(){
-			this.SearchIndexSwitch=true;
-			this.gedanIndexSwitch=false;
-		}
+		
+		/*载入个性推荐*/
+		gexingtuijian:function(){
+			var that=this;
+			/*轮播图*/
+			axios.get("https://autumnfish.cn/homepage/block/page")
+			.then(function(response){
+				that.gexingtuijianlist=response.data.data;
+				that.gexingtuijianlunbo=that.gexingtuijianlist.blocks[0].extInfo.banners;
+			},function(err){})
+			/*获取推荐歌单*/
+			axios.get("https://autumnfish.cn/personalized",{
+				params:{
+					limit:14
+				}
+			})
+			.then(function(response){
+				that.tuijiangedan=response.data.result
+			},function(err){})
+			/*获取独家放送*/
+			axios.get("https://autumnfish.cn/personalized/privatecontent")
+			.then(function(response){
+				that.dujiafangsonglist=response.data.result;
+			},function(err){})
+			/*获取最新音乐*/
+			axios.get("https://autumnfish.cn/top/song",{
+				params:{
+					type:0
+				}
+			})
+			.then(function(response){
+				that.zuixinmusizlist=response.data.data.slice(0,9);
+				console.log(response);
+			},function(err){})
+		},
 	},
 	mounted:function() {  //自动触发函数
-		this.goimg()
+		this.gexingtuijian()
 	},
 	watch:{
 		

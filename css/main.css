@@ -1,7 +1,7 @@
 .top{
 			background-color: #ff0000;
 			height: 50px;
-			width: 1400px;
+			width: 100%;
 		}
 		.log{
 			position: relative;
@@ -59,7 +59,7 @@
 			color: #fff;
 		}
 		#app{
-			width:70%;
+			width:100%;
 			height: 900px;
 			margin: 0 auto;
 		}
@@ -76,12 +76,16 @@
 			border: 0;
 			background-color: #ff007f;
 		}
+		.musiz_body{
+			width: 100%;
+			height: 800px;
+		}
 		.left{
 			background-color: #fff;
-			height: 700px;
-			width: 150px;
-			position: relative;
-			top: -10px;
+			height: 800px;
+			width: 10%;
+			position: absolute;
+			float: left;
 			border-right: 1px solid #000000;
 		}
 		.left_li{
@@ -101,26 +105,29 @@
 			background-color: #eeedec;
 			cursor: pointer;
 		}
+		.left_ul_click{
+			background-color: #eeedec;
+		}
 		.button{
-			position: relative;
-			top: -9px;
-			width: 1400px;
+			position: absolute;
+			top: 800px;
+			width: 100%;
 			height: 54px;
 			background-color: #e6e6e6;
 		}
 		audio{
 			outline: none;
 			position: absolute;
-			left: 150px;
+			left: 20%;
 			width: 1000px;
 		
 		}
 		.button_img{
 			width: 54px;
 			height: 54px;
-			position: relative;
+			position: absolute;
 			float: left;
-			left: -1210px;
+			left: 5%;
 			border-radius: 50%;
 			-webkit-animation: XuanZhuan 2s infinite;
 			-webkit-animation-direction: normal;
@@ -137,12 +144,11 @@
 		}
 		
 		.right{
-			width: 1250px;
-			height: 700px;
-			position: relative;
+			width: 90%;
+			height: 800px;
+			position: absolute;
 			float: left;
-			top: -710px;
-			right: -150px;
+			left: 10%;
 			background-color: #ffffff;
 			overflow: auto;
 		}
@@ -201,14 +207,16 @@
 		.right_MV_img:hover,
 		.right_musiz_tr2,
 		.right_musiz_tr_img:hover,
-		.zhuanjiindex_top_div2 p:nth-child(3):hover{
+		.gexingtuijian_gedan_img:hover,
+		.zuixinmusiz_img:hover,
+		.dujiafangsong_li:hover{
 			cursor: pointer;
 		}
 		.right_musiz_li{
 			float: left;
 			height: 200px;
-			width: 15%;
-			margin-left: 10px;
+			width: 10%;
+			margin-left: 20px;
 			
 		}
 		.right_musiz_MV_person{
@@ -238,6 +246,9 @@
 			height: 100px;
 			overflow: hidden;
 		}
+		.right_musiz_tr_gechi_zhankai{
+			height: 700px;
+		}
 		.right_musiz_tr_gechi_one{
 			width: 100px;
 			text-align: center;
@@ -257,33 +268,29 @@
 			width: 50px;
 		}
 		.video_div{
-			margin-top: 80px;
+			margin-top: 20px;
+			width: 85%;
+			height: 600px;
 		}
 		.video_video{
 			margin-left: 20px;
-			width: 900px;
-			height: 600px;
+			width: 100%;
+			height: 100%;
 			outline: none;
 		}
 		.MV_left{
 			margin-right: 0;
-			width: 900px;
+			width: 80%;
 			height: 900px;
 		}
 
 		.MVDiv{
-			position: relative;
-			float: left;
-			top: -1409px;
+			position: absolute;
 			background-color: #ffffff;
-			width: 1400px;
+			width: 100%;
 			height: 800px;
 			max-height: 800px;
 			overflow: auto;
-		}
-		@keyframes yidon{
-			from{}
-			to{}
 		}
 		.MV_top_p{
 			float: left;
@@ -298,10 +305,8 @@
 		.MV_right{
 			float: right;
 			position: relative;
-			right: 250px;
-			top: 30px;
 			font-size: 20px;
-			width: 100px;
+			width: 20%;
 			height: 700px;
 		}
 		.MV_right_img{

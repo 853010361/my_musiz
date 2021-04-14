@@ -1,6 +1,5 @@
 .gexingtuijian{
 	width: 100%;
-	float: left;
 }
 /* 轮播图样式 */
 .swiper-container {
@@ -27,3 +26,90 @@
 		        -webkit-align-items: center;
 		        align-items: center;
 		    }
+			.swiper-slide img{
+				width: 80%;
+			}
+			.swiper-slide img:hover{
+				cursor: pointer;
+			}
+.gexingtuijian_title{
+	font-size: 30px;
+	margin-left: 20px;
+	font-weight: 800;
+}
+.gexingtuijian_gedan_img{
+	width: 100%;
+	height: 150px;
+	border-radius: 5px;
+}
+.gexingtuijian_gedan_li{
+	float: left;
+	width: 12%;
+	margin-left: 1%;
+	margin-top: 4px;
+}
+.gexingtuijian_gedan_p{
+	margin-top: 8px;
+}
+.gexingtuijian_gedan{
+	margin-top: 50px;
+	width: 100%;
+	height: 500px;
+}
+/*独家放送*/
+.dujiafangsong_img{
+	width: 100%;
+	border-radius: 5px;
+}
+.dujiafangsong_li{
+	width: 30%;
+	float: left;
+	margin-left: 1%;
+}
+.dujiafangsong_p{
+	font-size: 18px;
+}
+.dujiafangsong{
+	height: 250px;
+}
+/*最新音乐*/
+.zuixinmusiz_img{
+	width: 40%;
+	height: 100%;
+	float: left;
+	border-radius: 5px;
+}
+.zuixinmusiz_ul{
+	width: 100%;
+}
+.zhuixinmusiz_li{
+	float: left;
+	width: 24%;
+	height: 100px;
+	margin-left: 3%;
+	margin-top: 20px;
+}
+.zuixinmusiz_div{
+	float: left;
+	font-size: 12px;
+	max-width: 50%;
+}
+.zuixinmusiz_name{
+	color: #999999;
+}
+.zuixinmusiz_title{
+	height: 20px;
+	width: 50%;
+	overflow: hidden;
+}
+.zhuixinmusiz_li:hover{
+	background-color: #c3c3c3;
+}
+.zhuixinmusiz_play{
+	position: relative;
+	top: 30%;
+	left: -30%;
+	float: left;
+	width: 18%;
+	height: 30%;
+}

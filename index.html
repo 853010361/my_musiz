@@ -40,14 +40,77 @@
 				</div>
 			</div>
 			<!-- 中间部分 -->
-			<div>
+			<div class="musiz_body">
 				<!-- 左边列表 -->
 				<div class="left">
+				<!-- 发现音乐页面 -->	
 					<ul class="left_li">
-						<li class="left_ul">发现音乐</li>
-						<li class="left_ul">视频</li>
-						<li class="left_ul">朋友</li>
+						<li class="left_ul" :class="{left_ul_click:leftgo==1}" @click="leftgo=1">发现音乐</li>
+						<li class="left_ul" :class="{left_ul_click:leftgo==2}" @click="leftgo=2">视频</li>
+						<li class="left_ul" :class="{left_ul_click:leftgo==3}" @click="leftgo=3">朋友</li>
 					</ul>
+				</div>
+				<div class="right" v-if="leftgo==1">
+					<!-- 头部 -->
+					<ul class="right_ul">
+						<li class="right_li" :class="{BianRed:faxianIndextopred==1}" @click="faxianIndextopred=1">个性推荐</li>
+						<li class="right_li" :class="{BianRed:faxianIndextopred==2}" @click="faxianIndextopred=2">歌单</li>
+						<li class="right_li" :class="{BianRed:faxianIndextopred==3}" @click="faxianIndextopred=3">主播电台</li>
+						<li class="right_li" :class="{BianRed:faxianIndextopred==4}" @click="faxianIndextopred=4">排行榜</li>
+						<li class="right_li" :class="{BianRed:faxianIndextopred==5}" @click="faxianIndextopred=5">歌手</li>
+						<li class="right_li" :class="{BianRed:faxianIndextopred==6}" @click="faxianIndextopred=6">最新音乐</li>
+					</ul>
+					<!-- 内容 -->
+					<div class="gexingtuijian">
+						<!-- 轮播图 -->
+						<div class="swiper-container" v-show="lunboswitch">
+						        <div class="swiper-wrapper">
+						            <div class="swiper-slide" v-for="item in gexingtuijianlunbo">
+										<img :src="item.pic" @click="PlayMV2(item.encodeId)" v-if="item.targetType == 1004">
+										<img :src="item.pic" @click="play(item.encodeId)" v-if="item.targetType == 1">
+										<a v-if="item.targetType == 3000" :href="item.url"><img :src="item.pic"></a>
+										<img :src="item.pic" @click="zhuanjiget(item.encodeId)" v-if="item.targetType == 10">
+										<img :src="item.pic" @click="gedanget(item.encodeId)" v-if="item.targetType == 1002">
+									</div>
+						        </div>
+						        <!-- Add Pagination -->
+						        <div class="swiper-pagination"></div>
+						        <!-- Add Arrows -->
+						        <div class="swiper-button-next"></div>
+						        <div class="swiper-button-prev"></div>
+						</div>
+						<!-- 推荐歌单 -->
+						<div class="gexingtuijian_gedan" >
+							<div class="gexingtuijian_title"><p>推荐歌单</p></div>
+							<div>
+								<ul>
+									<li class="gexingtuijian_gedan_li col-md-2" v-for="item in tuijiangedan"><img :src="item.picUrl" class="gexingtuijian_gedan_img" @click="gedanget(item.id)"><p class="gexingtuijian_gedan_p">{{item.name}}</p></li>
+								</ul>
+							</div>
+						</div>
+						<!-- 独家放送 -->
+						<div class="gexingtuijian_gedan dujiafangsong">
+							<div class="gexingtuijian_title"><p>独家放送</p></div>
+							<ul class="dujiafangsong_ul">
+								<li class="dujiafangsong_li" v-for="item in dujiafangsonglist"><img :src="item.picUrl" class="dujiafangsong_img" @click="PlayMV2(item.id)"><p class="dujiafangsong_p">{{item.name}}</p></li>
+							</ul>
+						</div>
+						<!-- 最新音乐 -->
+						<div class="gexingtuijian_gedan">
+							<div class="gexingtuijian_title"><p>最新音乐</p></div>
+							<ul class="zuixinmusiz_ul">
+								<li class="zhuixinmusiz_li" v-for="item in zuixinmusizlist" >
+									<img class="zuixinmusiz_img" :src="item.album.picUrl" @click="play(item.id)"/>
+									<img src="img/play.png" class="right_musiz_tr_img zhuixinmusiz_play" @click="play(item.id)">
+									<div class="zuixinmusiz_div">
+										<p class="zuixinmusiz_title">{{item.name}}</p>
+										<p class="zuixinmusiz_name">{{item.artists[0].name}}</p>
+										<img class="button_MV_img right_MV_img" v-if="item.mvid!=0" @click="PlayMV2(item.mvid);pause2()">
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 				<!-- 搜索页面 -->
 				<div class="right" v-if="SearchIndexSwitch">
@@ -115,7 +178,7 @@
 					<ul class="right_musiz" v-if="SearchMV2!=0">
 
 						<li class="right_musiz_li" v-for="(item,index) in SearchMV2">
-							<img v-bind:src="item.coverUrl" class="right_MV_img" @click="PlayMV(item.vid);pause2()">
+							<img v-bind:src="item.coverUrl" class="right_MV_img" @click="PlayMV(item.vid);pause2();MVindex=true">
 							<p class="right_musiz_MV_title">{{item.title}}</p>
 							<p class="right_musiz_MV_by">by</p>
 							<p class="right_musiz_MV_person">{{item.creator[0].userName}}</p>
@@ -143,10 +206,13 @@
 							<td class="right_musiz_tr_gechi_one">{{index+1}}</td>
 							<td class="right_musiz_tr_gechi_two">
 								<p>{{item.name}}</p>
-								<pre class="right_musiz_tr_gechi">{{item.lyrics.txt}}</pre>
+								<pre class="right_musiz_tr_gechi" :class="{right_musiz_tr_gechi_zhankai:item.active==false}">{{item.lyrics.txt}}</pre>
 							</td>
 							<td>
 								<p class="right_musiz_tr_gechi_person">{{item.artists[0].name}}</p>
+								<button @click="GechiGo(item,index)" v-if="item.active==undefined">展开歌词</button>
+								<button @click="GechiGo(item,index)" v-if="item.active==true">展开歌词</button>
+								<button @click="GechiGo(item,index)" v-if="item.active==false">收起歌词</button>
 							</td>
 							<td>{{item.album.name}}</td>
 						</tr>
@@ -196,7 +262,9 @@
 				</div>
 				<!-- 歌手信息页面 -->
 				<div class="right" v-if="personIndexSwitch">
-					<div class="person_first" @click="PersonOff">《回退</div>
+					<div class="person_first" @click="personIndexSwitch=false,lunboswitch=true">
+						<p>返回</p>
+					</div>
 					<!-- 歌手头像 -->
 					<div class="person_top">
 						<img  :src="personimgsrc" class="person_img"/>
@@ -236,7 +304,7 @@
 										<tr v-for="(item,index) in PersonHot">
 											<td>{{index+1}}</td>
 											<td><a href="javascript:;" @click="play(item.id)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
-											<td><span class="glyphicon glyphicon-heart-empty" :class="{'BianRed':item.active}" @click="RedGo(item,index)"></span></td>
+											<td><span class="glyphicon glyphicon-heart-empty" :class="{'BianRed':item.kongzi}" @click="RedGo(item)"></span></td>
 											<td>{{item.name}}</td>
 										</tr>
 									</table>
@@ -257,7 +325,7 @@
 										<tr v-for="(item2,index2) in PersonZhuanJi[index].data.songs.slice(0,10)">
 											<td>{{index2+1}}</td>
 											<td><a href="javascript:;" @click="play(item2.id)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
-											<td><span class="glyphicon glyphicon-heart-empty"></span></td>
+											<td><span class="glyphicon glyphicon-heart-empty" :class="{'BianRed':item2.kongzi}" @click="RedGo(item2)"></span></td>
 											<td>{{item2.name}}</td>
 										</tr>
 									</table>
@@ -290,7 +358,7 @@
 						</div>
 						<div v-for="item in personmeg.introduction" class="person_meg">
 							<p class="person_meg_title">{{item.ti}}</p>
-							<p class="person_meg_text">{{item.txt}}</p>
+							<pre class="person_meg_text">{{item.txt}}</pre>
 						</div>
 						<div v-if="personmeg.introduction.txt != null">
 							<p class="person_null">暂无简介</p>
@@ -311,13 +379,15 @@
 				</div>
 				<!-- 专辑页面 -->
 				<div class="right" v-if="zhuanjiIndexSwitch">
-					<div class="person_first" @click="zhuanjioff">《回退</div>
+					<div class="person_first" @click="zhuanjiIndexSwitch=false,lunboswitch=true">
+						<p>返回</p>
+					</div>
 					<div class="zhuanjiindex_top">
 						<div class="zhuanjiindex_top_div1"><img :src="zhuanjimain.data.album.blurPicUrl" class="person_img"></div>
 						<div class="zhuanjiindex_top_div2">
 							<p>专辑</p>
 							<p>{{zhuanjimain.data.album.name}}</p>
-							<p>歌手:<span @click="personindex(zhuanjimain.data.album.artist.id,zhuanjimain.data.album.artist.picUrl)" class="bluego">{{zhuanjimain.data.album.artist.name}}</span></p>
+							<p>歌手:{{zhuanjimain.data.album.artist.name}}</p>
 						</div>
 					</div>
 					
@@ -385,7 +455,9 @@
 				</div>
 				<!-- 歌单页面 -->
 				<div class="right" v-if="gedanIndexSwitch">
-					<div class="person_first" @click="gedanoff">《回退</div>
+					<div class="person_first" @click="gedanIndexSwitch=false,lunboswitch=true">
+						<p>返回</p>
+					</div>
 					<div class="zhuanjiindex_top">
 						<div class="zhuanjiindex_top_div1"><img :src="gedanmain.playlist.coverImgUrl" class="person_img"></div>
 						<div class="zhuanjiindex_top_div2">
@@ -461,32 +533,6 @@
 						</ul>
 					</div>
 				</div>
-				<!-- 发现音乐页面 -->
-				<div class="right" v-if="false">
-					<!-- 头部 -->
-					<ul class="right_ul">
-						<li class="right_li" :class="{BianRed:faxianIndextopred==1}" @click="faxianIndextopred=1">个性推荐</li>
-						<li class="right_li" :class="{BianRed:faxianIndextopred==2}" @click="faxianIndextopred=2">歌单</li>
-						<li class="right_li" :class="{BianRed:faxianIndextopred==3}" @click="faxianIndextopred=3">主播电台</li>
-						<li class="right_li" :class="{BianRed:faxianIndextopred==4}" @click="faxianIndextopred=4">排行榜</li>
-						<li class="right_li" :class="{BianRed:faxianIndextopred==5}" @click="faxianIndextopred=5">歌手</li>
-						<li class="right_li" :class="{BianRed:faxianIndextopred==6}" @click="faxianIndextopred=6">最新音乐</li>
-					</ul>
-					<!-- 内容 -->
-					<div class="gexingtuijian">
-						<!-- 轮播图 -->
-						<div class="swiper-container">
-						        <div class="swiper-wrapper">
-						            <div class="swiper-slide" v-for="item in faxianlunbo"><img :src="item.pic" @click="play(item.song.id)"></div>
-						        </div>
-						        <!-- Add Pagination -->
-						        <div class="swiper-pagination"></div>
-						        <!-- Add Arrows -->
-						        <div class="swiper-button-next"></div>
-						        <div class="swiper-button-prev"></div>
-						</div>
-					</div>
-				</div>
 				<!-- 切换页面读取中 -->
 				<div class="loadingindex" v-if="loadingindex">
 					<div class="loading_div">
@@ -499,84 +545,73 @@
 						<p class="loading_text">l</p>
 					</div>
 				</div>
+				<!-- 视频播放页 -->
+				<div class="MVDiv" v-if="MVindex">
+					<div class="person_first" @click="MVindex=false,lunboswitch=true,musizswitch=true" style="margin-top: 20px;">
+						<p>返回</p>
+					</div>
+					<!-- 视频播放页相关推荐 -->
+					<div class="MV_right">
+						<ul>
+							<li><p>相关推荐</p></li>
+							<li class="MV_right_li" v-for="(item,index) in MVXiangGuan">
+								<img :src="item.coverUrl" class="MV_right_img" @click="PlayMV(item.vid)" v-if="item.type=1"/>
+								<img :src="item.coverUrl" class="MV_right_img" @click="PlayMV2(item.vid)" v-if="item.type=0"/>
+								<p class="MV_right_MV" v-if="item.type=0">MV</p>
+								<p class="MV_right_title" >{{item.title}}</p>
+								<p class="MV_right_zuoze">by{{item.creator[0].userName}}</p>
+							</li>
+						</ul>
+					</div>	
+					<!-- 视频播放页左边 -->
+					<div class="MV_left">
+						<!-- 视频播放器 -->
+						<div class="video_div">
+							<video v-bind:src="MVDiZhi" controls="controls" class="video_video"></video>
+						</div>
+						<!-- 视频信息 -->
+						<div class="MV_left_person">
+							<div>
+								<!-- 视频头像 -->
+								<img :src="MVneilong.avatarUrl" class="MV_left_person_img" v-show="ShiPingImg"/>
+								<!-- MV头像 -->
+								<img :src="MVneilong.cover" class="MV_left_person_img" v-show="MVImg"/>
+								<p class="MV_left_person_zuoze">{{MVtitle}}</p>
+								<p class="MV_left_title">{{MVneilong.title}}</p>
+								<p class="MV_left_title">{{MVneilong.name}}</p>
+							</div>
+						</div>
+						<!-- 精彩评论 -->
+						<div class="MV_left_pinlun_hot">
+							<ul>
+								<p class="MV_left_pinlun_hot_top">精彩评论</p>
+								<li class="MV_left_pinlun_hot_li" v-for=" item in MVPinlunhot">
+									<img :src="item.user.avatarUrl" class="MV_left_pinlun_hot_img"/>
+									<p class="MV_left_pinlun_hot_person">{{item.user.nickname}}:</p>
+									<p class="MV_left_pinlun_hot_neilong">{{item.content}}</p>
+									<hr />
+								</li>
+							</ul>
+						</div>
+						<!-- 最新评论 -->
+						<div class="MV_left_pinlun_hot">
+							<ul>
+								<p class="MV_left_pinlun_hot_top MV_left_pinlun_new_p">最新评论</p>
+								<li class="MV_left_pinlun_hot_li" v-for="item in MVPinlunNew">
+									<img :src="item.user.avatarUrl" class="MV_left_pinlun_hot_img"/>
+									<p class="MV_left_pinlun_hot_person">{{item.user.nickname}}:</p>
+									<p class="MV_left_pinlun_hot_neilong">{{item.content}}</p>
+									<hr />
+								</li>
+							</ul>
+						</div>	
+					</div>
+				</div>
 			</div>
-			
 			<!-- 音乐播放器 -->
-			<div class="button">
+			<div class="button" v-if="musizswitch">
 				<img class="button_img" v-bind:src="musizimg" v-show="musizimg!=0" :class="{playing:isplaying}"/>
 				<audio ref='audio' controls loop v-bind:src="musiz" autoplay="autoplay" id="YingYue" @play="isplaying=true" @pause="isplaying=false"></audio>
-			</div>
-			
-			<!-- 视频播放页 -->
-			<div class="MVDiv" v-show="MVDiZhi!=0">
-				<!-- 视频播放页头部 -->
-				<div class="MV_top"><p class="MV_top_p" @click="MVOff()">《视频详情</p></div>
-				<!-- 视频播放页相关推荐 -->
-				<div class="MV_right">
-					<ul>
-						<li><p>相关推荐</p></li>
-						
-						<li class="MV_right_li" v-for="(item,index) in MVXiangGuan">
-							<img :src="item.coverUrl" class="MV_right_img" @click="PlayMV(item.vid)" v-if="item.type=1"/>
-							<img :src="item.coverUrl" class="MV_right_img" @click="PlayMV2(item.vid)" v-if="item.type=0"/>
-							<p class="MV_right_MV" v-if="item.type=0">MV</p>
-							<p class="MV_right_title" >{{item.title}}</p>
-							<p class="MV_right_zuoze">by{{item.creator[0].userName}}</p>
-						</li>
-
-					</ul>
-				</div>	
-				<!-- 视频播放页左边 -->
-				<div class="MV_left">
-					<!-- 视频播放器 -->
-					<div class="video_div">
-						<video v-bind:src="MVDiZhi" controls="controls" class="video_video"></video>
-					</div>
-					<!-- 视频信息 -->
-					<div class="MV_left_person">
-						<div>
-							<!-- 视频头像 -->
-							<img :src="MVneilong.avatarUrl" class="MV_left_person_img" v-show="ShiPingImg"/>
-							<!-- MV头像 -->
-							<img :src="MVneilong.cover" class="MV_left_person_img" v-show="MVImg"/>
-							<p class="MV_left_person_zuoze">{{MVtitle}}</p>
-							<p class="MV_left_title">{{MVneilong.title}}</p>
-							<p class="MV_left_title">{{MVneilong.name}}</p>
-						</div>
-					</div>
-					<!-- 精彩评论 -->
-					<div class="MV_left_pinlun_hot">
-						<ul>
-							
-							<p class="MV_left_pinlun_hot_top">精彩评论</p>
-							
-							<li class="MV_left_pinlun_hot_li" v-for=" item in MVPinlunhot">
-								<img :src="item.user.avatarUrl" class="MV_left_pinlun_hot_img"/>
-								<p class="MV_left_pinlun_hot_person">{{item.user.nickname}}:</p>
-								<p class="MV_left_pinlun_hot_neilong">{{item.content}}</p>
-								<hr />
-							</li>
-								
-						</ul>
-					</div>
-					<!-- 最新评论 -->
-					<div class="MV_left_pinlun_hot">
-						<ul>
-							
-							<p class="MV_left_pinlun_hot_top MV_left_pinlun_new_p">最新评论</p>
-							
-							<li class="MV_left_pinlun_hot_li" v-for="item in MVPinlunNew">
-								<img :src="item.user.avatarUrl" class="MV_left_pinlun_hot_img"/>
-								<p class="MV_left_pinlun_hot_person">{{item.user.nickname}}:</p>
-								<p class="MV_left_pinlun_hot_neilong">{{item.content}}</p>
-								<hr />
-							</li>
-								
-						</ul>
-					</div>
-						
-				</div>
-				
 			</div>
 		</div>
 	</body>
