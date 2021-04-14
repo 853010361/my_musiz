@@ -107,6 +107,8 @@ var vm =new Vue({
 		gedanmusizlist:[],
 		/*歌单收藏者*/
 		gedansouchangperson:[],
+		/*切换页面读取中*/
+		loadingindex:false,
 	},
 	
 	methods:{
@@ -379,23 +381,30 @@ var vm =new Vue({
 		/*获取歌手页面*/
 		personindex:function(id,imgsrc){
 			var that=this;
-			
+			that.loadingindex=true;
+			that.SearchIndexSwitch=false;
+			that.zhuanjiIndexSwitch=false;
 			/*获取歌手信息*/
 			axios.get("https://autumnfish.cn/artist/album"+"?id="+id+"&limit=50")
 			.then(function(response){
 				that.personMain=response.data;
-				/*获取歌手专辑的歌曲列表*/
-				that.personIndexSwitch=true;
-				that.SearchIndexSwitch=false;
-				that.zhuanjiIndexSwitch=false;
 				that.personimgsrc=imgsrc;
 				that.personred=1;
+				/*获取歌手专辑的歌曲列表*/
+				var arr2 = new Array;
 				for(let i=0; i<that.personMain.hotAlbums.length;i++){
-					axios.get("https://autumnfish.cn/album?id="+that.personMain.hotAlbums[i].id)
-								.then(function(response2){
-									that.PersonZhuanJi[i]=response2;
-								},function(err){console.log("错误")})
+					arr2[i]="https://autumnfish.cn/album?id="+that.personMain.hotAlbums[i].id;
 				}
+				axios.all(arr2.map(function(data){
+					return axios.get(data);
+				}))
+				.then(axios.spread(function(){
+					that.PersonZhuanJi=arguments;
+					console.log(that.PersonZhuanJi);
+					
+					that.personIndexSwitch=true;
+					that.loadingindex=false;
+				}))
 			},function(err){})
 			
 			
@@ -457,11 +466,12 @@ var vm =new Vue({
 				that.faxianlunbo=response.data.data.blocks[0].extInfo.banners;
 			},function(err){})
 		},
-		/*请求专辑页面数据*/
+		/*打开专辑页面数据*/
 		zhuanjiget:function(id){
 			var that=this;
 			this.zhuanjiIndexSwitch=true;
 			this.SearchIndexSwitch=false;
+			this.loading=true;
 			/*专辑详细数据*/
 			axios.get("https://autumnfish.cn/album",{
 				params:{
@@ -491,6 +501,8 @@ var vm =new Vue({
 			.then(function(response){
 				that.zhuanjipinlunlist=response.data;
 			},function(err){})
+			
+			this.loadingindex=false;
 		},
 		/*关闭专辑页面*/
 		zhuanjioff:function(){
@@ -500,6 +512,8 @@ var vm =new Vue({
 		/*获取歌单信息*/
 		gedanget:function(id){
 			var that=this;
+			this.SearchIndexSwitch=false;
+			this.loadingindex=true;
 			/*歌单信息*/
 			axios.get("https://autumnfish.cn/playlist/detail",{
 				params:{
@@ -509,14 +523,21 @@ var vm =new Vue({
 			.then(function(response){
 				that.gedanmain=response.data;
 				/*歌单歌曲列表*/
-				for(let u=0; u<10;u++){
-					axios.get("https://autumnfish.cn/song/detail?ids="+that.gedanmain.playlist.trackIds[u].id)
-								.then(function(response2){
-									that.gedanmusizlist[u]=response2;
-								},function(err){console.log("错误")})
+				var arr1 = new Array;
+				for(let i=0; i<20;i++){
+					arr1[i] = "https://autumnfish.cn/song/detail?ids="+that.gedanmain.playlist.trackIds[i].id
 				}
+				axios.all(arr1.map(function(data){
+					return axios.get(data);
+				}))
+				.then(axios.spread(function(){
+					var arr2 = new Array;
+					that.gedanmusizlist = arguments;
+					console.log(that.gedanmusizlist);
+				}))
+				
 			},function(err){})
-			console.log(that.gedanmusizlist);
+			
 			/*歌单评论*/
 			axios.get("https://autumnfish.cn/comment/playlist",{
 				params:{
@@ -526,14 +547,15 @@ var vm =new Vue({
 			.then(function(response){
 				that.gedancomment=response.data;
 			},function(err){})
-			/*歌单评论数量*/
+			/*歌单数据量数量*/
 			axios.get("https://autumnfish.cn/playlist/detail/dynamic",{
 				params:{
 					id:id
 				}
 			})
 			.then(function(response){
-				that.gedancommentnumber=response.data.playlist.commentCount;
+				that.gedancommentnumber=response.data;
+				console.log(that.gedancommentnumber);
 			},function(err){})
 			/*歌单收藏者*/
 			axios.get("https://autumnfish.cn/playlist/subscribers",{
@@ -545,6 +567,7 @@ var vm =new Vue({
 				that.gedansouchangperson=response.data;
 			},function(err){})
 			
+			this.loadingindex=false;
 			this.SearchIndexSwitch=false;
 			this.gedanIndexSwitch=true;
 		},

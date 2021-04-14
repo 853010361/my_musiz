@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="vue.js"></script>
+		<script src="axios.min.js"></script>
+		
+	</head>
+	<body>
+		<div id="app">
+			<button @click="go(6452)">按钮</button>
+			<p>我是谁{{meg}}</p>
+		</div>
+	</body>
+	<script>
+		var app =new Vue({
+			el:"#app",
+			data:{
+				meg:"我的",
+				arr1:[],
+			},
+			methods:{
+				go:function(id){
+					var that=this
+					axios.get("https://autumnfish.cn/artist/album",{
+						params:{
+							id:id
+						}
+					})
+					.then(function(response){
+						var arr2=new Array;
+						that.arr1=response.data;
+						for(var i=0;i<that.arr1.hotAlbums.length;i++){
+							arr2[i]="https://autumnfish.cn/album?id="+that.arr1.hotAlbums[i].id;
+						}
+						axios.all(arr2.map(function(data){
+							return axios.get(data);
+						}))
+						.then(axios.spread(function(){
+							var arr3 = new Array;
+							arr3=arguments;
+							console.log(arr3);
+						}))
+						console.log(arr2.length);
+					},function(err){})
+				}
+			}
+		})
+	</script>
+</html>

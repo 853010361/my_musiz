@@ -436,4 +436,8 @@
 		.loading_p{
 			font-size: 40px;
 		}
-		
+		.loadingindex{
+			position: absolute;
+			top: 60px;
+			left: 300px;
+		}
