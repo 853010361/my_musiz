@@ -302,7 +302,7 @@
 						<div class="zhuanjiindex_top_div2">
 							<p>专辑</p>
 							<p>{{zhuanjimain.data.album.name}}</p>
-							<p @click="personindex(zhuanjimain.data.album.artist.id,zhuanjimain.data.album.artist.picUrl)">歌手:{{zhuanjimain.data.album.artist.name}}</p>
+							<p>歌手:<span @click="personindex(zhuanjimain.data.album.artist.id,zhuanjimain.data.album.artist.picUrl)" class="bluego">{{zhuanjimain.data.album.artist.name}}</span></p>
 						</div>
 					</div>
 					
@@ -377,6 +377,7 @@
 							<ul class="gedanindex_ul"><li class="border_red">歌单</li><li>{{gedanmain.playlist.name}}</li></ul>
 							<ul class="gedanindex_ul"><li><img :src="gedanmain.playlist.creator.avatarUrl"></li><li>{{gedanmain.playlist.creator.nickname}}</li></ul>
 							<ul class="gedanindex_ul"><li>标签:</li><li v-for="item in gedanmain.playlist.tags">{{item}}/</li></ul>
+							<ul class="gedanindex_ul"><li>歌曲:{{gedancommentnumber.playlist.trackCount}}</li><li>播放:{{gedancommentnumber.playlist.playCount}}</li></ul>
 							<ul class="gedanindex_ul"><li>简介:</li><li class="text_max">{{gedanmain.playlist.description}}</li></ul>
 						</div>
 					</div>
@@ -384,7 +385,7 @@
 					<div>
 						<ul class="person_ul zhuanjiindex_ul">
 							<li :class="{bottom_red:gedanindexred==1}" @click="gedanindexred=1">歌曲列表</li>
-							<li :class="{bottom_red:gedanindexred==2}" @click="gedanindexred=2">评论({{gedancommentnumber}})</li>
+							<li :class="{bottom_red:gedanindexred==2}" @click="gedanindexred=2">评论({{gedancommentnumber.playlist.commentCount}})</li>
 							<li :class="{bottom_red:gedanindexred==3}" @click="gedanindexred=3">收藏者</li>
 						</ul>
 					</div>
@@ -470,6 +471,10 @@
 						        <div class="swiper-button-prev"></div>
 						</div>
 					</div>
+				</div>
+				<!-- 切换页面读取中 -->
+				<div class="loadingindex" v-if="loadingindex">
+					<p class="loading_p">Loading...</p>
 				</div>
 			</div>
 			
