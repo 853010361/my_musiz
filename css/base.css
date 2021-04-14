@@ -11,4 +11,5 @@
     .hide,.none{display:none}
     .clearfix:after{visibility:hidden;clear:both;display:block;content:".";height:0}
     .clearfix{*zoom:1}
+	html{height: 100%;}
     

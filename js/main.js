@@ -109,6 +109,10 @@ var vm =new Vue({
 		gedansouchangperson:[],
 		/*切换页面读取中*/
 		loadingindex:false,
+		/*读取失败*/
+		loadingerr:false,
+		/*没有搜索结果*/
+		searchnull:false,
 	},
 	
 	methods:{
@@ -132,16 +136,25 @@ var vm =new Vue({
 		searchMusiz:function(){
 			var that=this;
 			this.loading=true;
+			this.loadingerr=false;
 			this.personIndexSwitch=false;
 			this.SearchIndexSwitch=true;
 			this.list=[];
+			this.searchnull=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&keywords="+this.title)
 			.then(function(response){
-				that.list=response.data.result.songs;
-				that.loading=false;
+				if(response.data.result.songs == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.list=response.data.result.songs;
+					that.loading=false;
+				}
+				
 			},function(err){
-				console.log('请求失败');
+				that.loading=false;
+				that.loadingerr=true;
 			});
 			that.SearchPerson2.splice(0,that.SearchPerson2.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
@@ -160,11 +173,22 @@ var vm =new Vue({
 		SearchPerson:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=100&keywords="+this.title)
 			.then(function(response){
-				that.SearchPerson2=response.data.result.artists;
+				if(response.data.result.artists == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchPerson2=response.data.result.artists;
+					that.loading=false;
+				}
+				
+			},function(err){
 				that.loading=false;
-			},function(err){});
+				that.loadingerr=true;
+			});
 			that.list.splice(0,that.list.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
 			that.SearchMV2.splice(0,that.SearchMV2.length);
@@ -179,12 +203,21 @@ var vm =new Vue({
 		SearchZhuanji:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=10&keywords="+this.title)
 			.then(function(response){
-				that.SearchZhuanji2=response.data.result.albums;
-				that.loading=false;
+				if(response.data.result.albums == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchZhuanji2=response.data.result.albums;
+					that.loading=false;
+				}
+				
 			},function(err){
-				console.log('请求失败');
+				that.loading=false;
+				that.loadingerr=true;
 			});
 			that.list.splice(0,that.list.length);
 			that.SearchPerson2.splice(0,that.SearchPerson2.length);
@@ -199,12 +232,19 @@ var vm =new Vue({
 		SearchMV:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
 			axios.get("https://autumnfish.cn/search?limit=100&type=1014&keywords="+this.title)
 			.then(function(response){
-				that.SearchMV2=response.data.result.videos;
-				that.loading=false;
+				if(response.data.result.videos == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchMV2=response.data.result.videos;
+					that.loading=false;
+				}
 		},function(err){
-			console.log('请求失败');
+			that.loading=false;
+			that.loadingerr=true;
 		});
 		that.list.splice(0,that.list.length);
 		that.SearchPerson2.splice(0,that.SearchPerson2.length);
@@ -219,12 +259,20 @@ var vm =new Vue({
 		SearchGedan:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
 			axios.get("https://autumnfish.cn/search?limit=100&type=1000&keywords="+this.title)
 			.then(function(response){
-				that.SearchGedan2=response.data.result.playlists;
-				that.loading=false;
+				if(response.data.result.playlists == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchGedan2=response.data.result.playlists;
+					that.loading=false;
+				}
+				
 			},function(err){
-				console.log('请求失败');
+				that.loading=false;
+				that.loadingerr=true;
 			});
 		that.list.splice(0,that.list.length);
 		that.SearchPerson2.splice(0,that.SearchPerson2.length);
@@ -239,11 +287,22 @@ var vm =new Vue({
 		SearchGechi:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1006&keywords="+this.title)
 			.then(function(response){
-				that.SearchGechi2=response.data.result.songs;
+				if(response.data.result.songs == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchGechi2=response.data.result.songs;
+					that.loading=false;
+				}
+				
+			},function(err){
 				that.loading=false;
-			},function(err){});
+				that.loadingerr=true;
+			});
 			that.list.splice(0,that.list.length);
 			that.SearchPerson2.splice(0,that.SearchPerson2.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
@@ -257,11 +316,22 @@ var vm =new Vue({
 		SearchDianTai:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1009&keywords="+this.title)
 			.then(function(response){
-				that.SearchDianTai2=response.data.result.djRadios;
+				if(response.data.result.djRadios == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchDianTai2=response.data.result.djRadios;
+					that.loading=false;
+				}
+				
+			},function(err){
 				that.loading=false;
-			},function(err){})
+				that.loadingerr=true;
+			})
 			that.list.splice(0,that.list.length);
 			that.SearchPerson2.splice(0,that.SearchPerson2.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
@@ -275,11 +345,22 @@ var vm =new Vue({
 		SearchName:function(){
 			var that=this;
 			this.loading=true;
+			this.searchnull=false;
+			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1004&keywords="+this.title)
 			.then(function(response){
-				that.SearchName2=response.data.result.mvs;
+				if(response.data.result.mvs == undefined){
+					that.loading=false;
+					that.searchnull=true;
+				}else{
+					that.SearchName2=response.data.result.mvs;
+					that.loading=false;
+				}
+				
+			},function(err){
 				that.loading=false;
-			},function(err){});
+				that.loadingerr=true;
+			});
 			that.list.splice(0,that.list.length);
 			that.SearchPerson2.splice(0,that.SearchPerson2.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
@@ -381,9 +462,9 @@ var vm =new Vue({
 		/*获取歌手页面*/
 		personindex:function(id,imgsrc){
 			var that=this;
-			that.loadingindex=true;
-			that.SearchIndexSwitch=false;
-			that.zhuanjiIndexSwitch=false;
+			this.loadingindex=true;
+			this.SearchIndexSwitch=false;
+			this.zhuanjiIndexSwitch=false;
 			/*获取歌手信息*/
 			axios.get("https://autumnfish.cn/artist/album"+"?id="+id+"&limit=50")
 			.then(function(response){
@@ -533,7 +614,6 @@ var vm =new Vue({
 				.then(axios.spread(function(){
 					var arr2 = new Array;
 					that.gedanmusizlist = arguments;
-					console.log(that.gedanmusizlist);
 				}))
 				
 			},function(err){})
@@ -555,7 +635,6 @@ var vm =new Vue({
 			})
 			.then(function(response){
 				that.gedancommentnumber=response.data;
-				console.log(that.gedancommentnumber);
 			},function(err){})
 			/*歌单收藏者*/
 			axios.get("https://autumnfish.cn/playlist/subscribers",{
@@ -579,6 +658,9 @@ var vm =new Vue({
 	},
 	mounted:function() {  //自动触发函数
 		this.goimg()
+	},
+	watch:{
+		
 	}
 });
 /*

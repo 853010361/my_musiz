@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="./css/swiper.min.css">
 		<link rel="stylesheet" href="./css/专辑页面.css"/>
 		<link rel="stylesheet" href="./css/歌单页面样式.css"/>
+		<link rel="stylesheet" href="./css/loading.css"/>
 		<script src="./js/swiper.min.js"></script>
 		<script src="./js/jquery.min.js"></script>
 		<script src="./js/bootstrap.bundle.js"></script>
@@ -175,8 +176,22 @@
 						
 					</table>
 					<!-- 读取中 -->
-					<div class="loading">
-						<p class="loading_p" v-if="loading">Loading...</p>
+					<div class="loading" v-if="loading">
+						<div class="loading_div">
+							<p class="loading_text">g</p>
+							<p class="loading_text">n</p>
+							<p class="loading_text">i</p>
+							<p class="loading_text">d</p>
+							<p class="loading_text">a</p>
+							<p class="loading_text">o</p>
+							<p class="loading_text">l</p>
+						</div>
+					</div>
+					<div class="loading" v-if="loadingerr">
+						<p class="loading_p">读取失败</p>
+					</div>
+					<div class="loading" v-if="searchnull">
+						<p class="loading_p">没有结果</p>
 					</div>
 				</div>
 				<!-- 歌手信息页面 -->
@@ -474,7 +489,15 @@
 				</div>
 				<!-- 切换页面读取中 -->
 				<div class="loadingindex" v-if="loadingindex">
-					<p class="loading_p">Loading...</p>
+					<div class="loading_div">
+						<p class="loading_text">g</p>
+						<p class="loading_text">n</p>
+						<p class="loading_text">i</p>
+						<p class="loading_text">d</p>
+						<p class="loading_text">a</p>
+						<p class="loading_text">o</p>
+						<p class="loading_text">l</p>
+					</div>
 				</div>
 			</div>
 			
