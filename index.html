@@ -624,13 +624,14 @@
 						</div>
 						<!-- 歌词页右边 -->
 						<div class="gechiindex_right">
-							<ul class="gechiindex_ul">
+							<ul class="gechiindex_ul" v-if="gechinull == false">
 								<li class="gechiindex_li"></li>
 								<li class="gechiindex_li"></li>
 								<li class="gechiindex_li"></li>
 								<li class="gechiindex_li"></li>
 								<li class="gechiindex_li" :class="{gechigo:index==gechinumber}" v-for="(item,index) in maingechi">{{item}}</li>
 							</ul>
+							<div v-if="gechinull == true" class="gechinull"><p>无歌词,敬请欣赏</p></div>
 						</div>
 					</div>
 					<!-- 歌词页下面 -->
