@@ -209,7 +209,8 @@
 		.right_musiz_tr_img:hover,
 		.gexingtuijian_gedan_img:hover,
 		.zuixinmusiz_img:hover,
-		.dujiafangsong_li:hover{
+		.dujiafangsong_li:hover,
+		.button_img:hover{
 			cursor: pointer;
 		}
 		.right_musiz_li{
