@@ -137,6 +137,8 @@ var vm =new Vue({
 		gechiindexswitch:false,
 		/*歌曲评论*/
 		gequpinglun:[],
+		/*歌词有无切换开关*/
+		gechinull:false,
 	},
 	
 	methods:{
@@ -170,6 +172,7 @@ var vm =new Vue({
 			this.zhuanjiIndexSwitch=false;
 			this.gedanIndexSwitch=false;
 			this.leftgo=0;
+			this.gechiindexswitch=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&keywords="+this.title)
 			.then(function(response){
@@ -728,7 +731,9 @@ var vm =new Vue({
 					}
 				})
 				.then(function(response){
-					if(response.data.lrc.lyric==undefined){
+					if(response.data.nolyric == true){
+						that.gechinull=true;
+					}else{
 						//默认语言
 						var arr1;
 						var arr4;
@@ -755,20 +760,22 @@ var vm =new Vue({
 						that.gechitime=arr3;
 						//arr3为时间节点数组,arr4为歌词
 					}
-					console.log(response);
 					
 				},function(err){})
 			},
 			/*拖动歌词*/
 			pro:function(){
-				var time = document.getElementById("YingYue").currentTime;
-				var ul = document.querySelector(".gechiindex_ul");
-				for(var j=0,len=this.gechitime.length;j<len;j++){
-					if(time<this.gechitime[j+1] && time>this.gechitime[j]){
-						this.gechinumber=j;
-						ul.style.transform = "translateY(" + -70*j + "px)";
+				if(this.gechinull != true){
+					var time = document.getElementById("YingYue").currentTime;
+					var ul = document.querySelector(".gechiindex_ul");
+					for(var j=0,len=this.gechitime.length;j<len;j++){
+						if(time<this.gechitime[j+1] && time>this.gechitime[j]){
+							this.gechinumber=j;
+							ul.style.transform = "translateY(" + -70*j + "px)";
+						}
 					}
 				}
+				
 			},
 			/*歌曲评论*/
 			gequpinglunget:function(){

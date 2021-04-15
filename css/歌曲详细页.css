@@ -79,3 +79,10 @@
 	height: 70px;
 	transition: 1s;
 }
+.gechinull{
+	position: relative;
+	top: 40%;
+	left: 40%;
+	margin-right: 10%;
+	font-size: 50px;
+}
