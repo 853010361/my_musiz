@@ -170,6 +170,8 @@ var vm =new Vue({
 						that.musizimg = response.data.songs[0].al.picUrl;
 						/*获取音乐id*/
 						that.musizId = index;
+						vm.opengechiindex();
+						vm.gequpinglunget();
 					},function(err){})
 				}
 			},function(err){})
@@ -928,6 +930,8 @@ var vm =new Vue({
 			/*播放上一首*/
 			playback:function(){
 				if(this.playmusizmode == 2){
+					vm.opengechiindex();
+					vm.gequpinglunget();
 					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
 					play(this.playinglist[n].id);
 				}else{
@@ -944,6 +948,8 @@ var vm =new Vue({
 			},
 			/*播放下一首*/
 			playnext:function(){
+				vm.opengechiindex();
+				vm.gequpinglunget();
 				if(this.playmusizmode == 2){
 					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
 					vm.play(this.playinglist[n].id);
@@ -953,7 +959,7 @@ var vm =new Vue({
 							if(i == this.playinglist.length-1){
 								vm.play(this.playinglist[0].id);
 							}else{
-								vm.play(this.playinglist[i].id);
+								vm.play(this.playinglist[i+1].id);
 							}
 						}
 					}
