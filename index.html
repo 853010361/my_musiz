@@ -15,6 +15,7 @@
 		<link rel="stylesheet" href="./css/歌单页面样式.css"/>
 		<link rel="stylesheet" href="./css/loading.css"/>
 		<link rel="stylesheet" href="./css/歌曲详细页.css"/>
+		<link rel="stylesheet" href="./css/播放列表.css"/>
 		<script src="./js/jquery.min.js"></script>
 		<script src="./js/bootstrap.bundle.js"></script>
 		<script src="./js/vue.js"></script>
@@ -46,7 +47,7 @@
 					</ul>
 				</div>
 				<!-- 发现音乐 -->
-				<div class="right" v-if="leftgo==1">
+				<div class="right" v-if="leftgo==10">
 					<!-- 头部 -->
 					<ul class="right_ul">
 						<li class="right_li" :class="{BianRed:faxianIndextopred==1}" @click="faxianIndextopred=1">个性推荐</li>
@@ -96,8 +97,8 @@
 							<div class="gexingtuijian_title"><p>最新音乐</p></div>
 							<ul class="zuixinmusiz_ul">
 								<li class="zhuixinmusiz_li" v-for="item in zuixinmusizlist" >
-									<img class="zuixinmusiz_img" :src="item.album.picUrl" @click="play(item.id)"/>
-									<img src="img/play.png" class="right_musiz_tr_img zhuixinmusiz_play" @click="play(item.id)">
+									<img class="zuixinmusiz_img" :src="item.album.picUrl" @click="play(item.id),addlishilist(item.id,item.name,item.album.name),addbofanglist(item.id,item.name,item.album.name)"/>
+									<img src="img/play.png" class="right_musiz_tr_img zhuixinmusiz_play" @click="play(item.id),addlishilist(item.id,item.name,item.album.name),addbofanglist(item.id,item.name,item.album.name)">
 									<div class="zuixinmusiz_div">
 										<p class="zuixinmusiz_title">{{item.name}}</p>
 										<p class="zuixinmusiz_name">{{item.artists[0].name}}</p>
@@ -135,8 +136,9 @@
 
 						<tr class="right_musiz_tr" v-for="(item,index) in list">
 							<td>{{index+1}}</td>
-							<td><a href="javascript:;" @click="play(item.id)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
+							<td><a href="javascript:;" @click="play(item.id),addlishilist(item.id,item.name,item.album.name),addbofanglist(item.id,item.name,item.album.name)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
 							<td><img class="button_MV_img right_MV_img" v-if="item.mvid!=0" @click="PlayMV2(item.mvid);pause2()"></td>
+							<td><span class="glyphicon glyphicon-plus DianJi" style="color: red;font-size: 20px;" @click="addbofanglist(item.id,item.name,item.album.name)"></span></td>
 							<td>{{item.name}}</td>
 							<td><p v-for="item2 in item.artists" style="float: left;">{{item2.name}}/</p></td>
 							<td>{{item.album.name}}</td>
@@ -299,8 +301,9 @@
 									<table>
 										<tr v-for="(item,index) in PersonHot">
 											<td>{{index+1}}</td>
-											<td><a href="javascript:;" @click="play(item.id)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
+											<td><a href="javascript:;" @click="play(item.id),addlishilist(item.id,item.name,item.ar[0].name),addbofanglist(item.id,item.name,item.ar[0].name)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
 											<td><span class="glyphicon glyphicon-heart-empty" :class="{'BianRed':item.kongzi}" @click="RedGo(item)"></span></td>
+											<td><span class="glyphicon glyphicon-plus DianJi" style="color: red;font-size: 20px;" @click="addbofanglist(item.id,item.name,item.ar[0].name)"></span></td>
 											<td>{{item.name}}</td>
 										</tr>
 									</table>
@@ -320,8 +323,9 @@
 									<table>
 										<tr v-for="(item2,index2) in PersonZhuanJi[index].data.songs.slice(0,10)">
 											<td>{{index2+1}}</td>
-											<td><a href="javascript:;" @click="play(item2.id)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
+											<td><a href="javascript:;" @click="play(item2.id),addlishilist(item2.id,item2.name,item2.ar[0].name),addbofanglist(item2.id,item2.name,item2.ar[0].name)"><img src="img/play.png" class="right_musiz_tr_img"></a></td>
 											<td><span class="glyphicon glyphicon-heart-empty" :class="{'BianRed':item2.kongzi}" @click="RedGo(item2)"></span></td>
+											<td><span class="glyphicon glyphicon-plus DianJi" style="color: red;font-size: 20px;" @click="addbofanglist(item2.id,item2.name,item2.ar[0].name)"></span></td>
 											<td>{{item2.name}}</td>
 										</tr>
 									</table>
@@ -400,8 +404,9 @@
 						
 							<tr class="right_musiz_tr zhuanjiindex_tr" v-for="(item,index) in zhuanjimain.data.songs">
 								<td>{{index+1}}</td>
-								<td><img src="img/play.png" class="right_musiz_tr_img" @click="play(item.id)"></td>
+								<td><img src="img/play.png" class="right_musiz_tr_img" @click="play(item.id),addlishilist(item.id,item.name,item.album.name),addbofanglist(item.id,item.name,item.album.name)"></td>
 								<td><img class="button_MV_img right_MV_img" @click="PlayMV2(item.mv)" v-show="item.mv!=0"></td>
+								<td><span class="glyphicon glyphicon-plus DianJi" style="color: red;font-size: 20px;" @click="addbofanglist(item.id,item.name,item.album.name)"></span></td>
 								<td>{{item.name}}</td>
 								<td>{{item.ar[0].name}}</td>
 								<td>{{item.al.name}}</td>
@@ -478,8 +483,9 @@
 						
 							<tr class="right_musiz_tr zhuanjiindex_tr" v-for="(item,index) in gedanmusizlist">
 								<td>{{index+1}}</td>
-								<td><img src="img/play.png" class="right_musiz_tr_img" @click="play(item.data.songs[0].id)"></td>
+								<td><img src="img/play.png" class="right_musiz_tr_img" @click="play(item.data.songs[0].id),addlishilist(item.data.songs[0].id,item.data.songs[0].name,item.data.songs[0].ar[0].name),addbofanglist(item.data.songs[0].id,item.data.songs[0].name,item.data.songs[0].ar[0].name)"></td>
 								<td><img class="button_MV_img right_MV_img" v-show="item.data.songs[0].mv != 0" @click="PlayMV2(item.data.songs[0].mv)"></td>
+								<td><span class="glyphicon glyphicon-plus DianJi" style="color: red;font-size: 20px;" @click="addbofanglist(item.id,item.name,item.album.name)"></span></td>
 								<td>{{item.data.songs[0].name}}</td>
 								<td>{{item.data.songs[0].ar[0].name}}</td>
 								<td>{{item.data.songs[0].al.name}}</td>
@@ -658,13 +664,53 @@
 								</li>
 							</ul>
 						</div>	
+					</div>	
+				</div>
+				<!-- 播放列表 -->
+				<div class="bofanglist" v-if="playlistindexswitch">
+					<div class="bofanglist_top">
+						<div class="bofanglist_top_top">
+							<p class="bofanglist_top_bofang DianJi" :class="{bianhui:bofangandlishi == 0}" @click="bofangandlishi=0,playinglist=bofanglist">播放列表</p>
+							<p class="bofanglist_top_lishi DianJi" :class="{bianhui:bofangandlishi == 1}" @click="bofangandlishi=1,playinglist=lishilist">历史记录</p>
+						</div>
+						<div class="bofanglist_top_bottom">
+							<p class="bofanglist_top_number">总{{playinglist.length}}首</p>
+							<p class="bofanglist_top_clear"><span class="glyphicon glyphicon-trash DianJi" @click="clearall()">清空</span></p>
+						</div>
+					</div>
+					
+					<div class="bofanglist_body">
+						<table class="bofanglist_body_table">
+							<tr class="bofanglist_body_tr" v-for="(item,index) in playinglist" :class="{playingmusiz:item.id==musizId}">
+								<td>{{index+1}}</td>
+								<td><img src="img/play.png" class="right_musiz_tr_img" @click="play(item.id),addlishilist(item.id,item.gname,item.pname)"></td>
+								<td><p>{{item.gname}}</p></td>
+								<td><p>{{item.pname}}</p></td>
+								<td><span class="glyphicon glyphicon-trash DianJi" @click="clear(index)"></span></td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
 			<!-- 音乐播放器 -->
 			<div class="button" v-if="musizswitch">
 				<img class="button_img" v-bind:src="musizimg" v-show="musizimg!=0" :class="{playing:isplaying}" @click="gechiindexswitch=true,opengechiindex(),gequpinglunget()" v-if="gechiindexswitch == false"/>
-				<audio ref="audio" controls loop v-bind:src="musiz" autoplay="autoplay" id="YingYue" @play="isplaying=true" @pause="isplaying=false" @timeupdate="pro()"></audio>
+				<audio ref="audio" controls autoplay v-bind:src="musiz" autoplay="autoplay" id="YingYue" @play="isplaying=true" @pause="isplaying=false" @timeupdate="pro()" @ended="playmusizgo()"></audio>
+				<span class="glyphicon glyphicon-th-list caidan" @click="playlistswitch()"></span>
+				<div class="musizdong">
+					<!-- 上一首 -->
+					<span class="glyphicon glyphicon-chevron-left" @click="playback()"></span>
+					<!-- 下一首 -->
+					<span class="glyphicon glyphicon-chevron-right" @click="playnext()"></span>
+				</div>
+				<div class="moshi">
+					<!-- 列表循环 -->
+					<span class="glyphicon glyphicon-retweet" v-show="playmusizmode == 1" @click="playmusizmode=2"></span><p v-show="playmusizmode == 1">列表循环</p>
+					<!-- 随机播放 -->
+					<span class="glyphicon glyphicon-random" v-show="playmusizmode == 2" @click="playmusizmode=3"></span><p v-show="playmusizmode == 2">随机播放</p>
+					<!-- 单曲循环 -->
+					<span class="glyphicon glyphicon-repeat" v-show="playmusizmode == 3" @click="playmusizmode=1"></span><p v-show="playmusizmode == 3">单曲循环</p>
+				</div>
 			</div>
 		</div>
 	</body>

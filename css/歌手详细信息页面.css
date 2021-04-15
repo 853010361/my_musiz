@@ -102,7 +102,7 @@
 		.person_three_list td:nth-child(3){
 			font-size: 20px;
 		}
-		.person_three_list td:nth-child(4){
+		.person_three_list td:nth-child(5){
 			width: 300px;
 		}
 		.person_three_list tr:nth-child(odd){

@@ -116,7 +116,7 @@ var vm =new Vue({
 		/*个性推荐轮播图*/
 		gexingtuijianlunbo:[],
 		/*左边排列选中器*/
-		leftgo:0,
+		leftgo:1,
 		/*音乐播放器显示控制*/
 		musizswitch:true,
 		/*推荐歌单*/
@@ -139,6 +139,20 @@ var vm =new Vue({
 		gequpinglun:[],
 		/*歌词有无切换开关*/
 		gechinull:false,
+		/*歌曲内容*/
+		gequmain:[],
+		/*播放列表*/
+		bofanglist:[],
+		/*历史列表*/
+		lishilist:[],
+		/*控制播放列表播放历史的切换*/
+		bofangandlishi:0,
+		/*存放播放列表和历史*/
+		playinglist:[],
+		/*播放列表的显示隐藏*/
+		playlistindexswitch:false,
+		/*音乐播放器模式,1是列表循环,2是随机播放,3是单曲循环*/
+		playmusizmode:1,
 	},
 	
 	methods:{
@@ -535,6 +549,7 @@ var vm =new Vue({
 					
 					that.personIndexSwitch=true;
 					that.loadingindex=false;
+					console.log(that.PersonZhuanJi);
 				}))
 			},function(err){})
 			
@@ -542,6 +557,7 @@ var vm =new Vue({
 			axios.get("https://autumnfish.cn/artist/top/song?id="+id)
 			.then(function(response){
 				that.PersonHot=response.data.songs;
+				console.log(that.PersonHot);
 			},function(err){})
 			
 			/*获取歌手MV信息*/
@@ -649,6 +665,7 @@ var vm =new Vue({
 					that.gedanmusizlist = arguments;
 					that.loadingindex=false;
 					that.gedanIndexSwitch=true;
+					console.log(that.gedanmusizlist);
 				}))
 			},function(err){})
 			
@@ -788,7 +805,163 @@ var vm =new Vue({
 				.then(function(response){
 					that.gequpinglun=response.data;
 				},function(err){})
+				
+				axios.get("https://autumnfish.cn/song/detail",{
+					params:{
+						ids:that.musizId
+					}
+				})
+				.then(function(response){
+					that.gequmain=response.data;
+				},function(err){})
+			},
+			/*添加播放列表*/
+			addbofanglist:function(id,gname,pname){
+				var x = 0;
+				var num = 0;
+				var that=this;
+				/*判断歌曲是否存在*/
+				axios.get("https://autumnfish.cn/song/url?id="+id)
+				.then(function(response){
+					if(response.data.data[0].url==null){
+
+					}else{
+						/*歌曲存在开始判断是否在列表中*/
+						for(let i=0;i<that.bofanglist.length;i++){
+							if(that.bofanglist[i].id == id && that.bofanglist[i].gname == gname && that.bofanglist[i].pname == pname){
+							x = 1;
+							num = i+1;
+							}
+						}
+						/*如果不在则加入列表中*/
+						if(x == 0){
+							that.bofanglist.push({id,gname,pname});
+						}else{
+
+						}
+					}
+				},function(err){})
+				
+				
+			},
+			/*添加历史记录*/
+			addlishilist:function(id,gname,pname){
+				var x = 0;
+				var num = 0;
+				var that=this;
+				
+				axios.get("https://autumnfish.cn/song/url?id="+id)
+				.then(function(response){
+					if(response.data.data[0].url==null){
+						window.alert("歌曲不存在");
+					}else{
+						for(let i=0;i<that.lishilist.length;i++){
+							if(that.lishilist[i].id == id && that.lishilist[i].gname == gname && that.lishilist[i].pname == pname){
+							x = 1;
+							num = i+1;
+							}
+						}
+							if(x == 0){
+							that.lishilist.push({id,gname,pname});
+						}
+					}
+				},function(err){})
+			},
+			/*播放列表切换*/
+			playlistswitch:function(){
+				this.playlistindexswitch =!this.playlistindexswitch;
+				if(this.bofangandlishi == 0){
+					this.playinglist=this.bofanglist;
+				}else{
+					this.playinglist=this.lishilist;
+				}
+			},
+			/*删除单独歌曲*/
+			clear:function(index){
+				if(this.bofangandlishi == 0){
+					this.playinglist.splice(index,1);
+					this.bofangandlishi.splice(index,1);
+				}else{
+					this.playinglist.splice(index,1);
+					this.lishilist.splice(index,1);
+				}
+			},
+			/*删除全部列表*/
+			clearall:function(){
+				if(this.bofangandlishi == 0){
+					this.playinglist.splice(0,this.playinglist.length);
+					this.bofangandlishi.splice(0,this.bofangandlishi.length);
+				}else{
+					this.playinglist.splice(0,this.playinglist.length);
+					this.lishilist.splice(0,this.lishilist.length);
+				}
+			},
+			/*播放器结束接着下一次播放,1是列表循环,2是随机播放,3是单曲循环*/
+			playmusizgo:function(){
+				this.bofangandlishi=0;
+				this.playinglist=this.bofanglist;
+				console.log("我已播放完毕");
+				
+				if(this.playinglist.length == 1){
+					document.getElementById("YingYue").load();
+				}else{
+					if(this.playmusizmode == 1){
+						for(let i = 0 ; i<this.playinglist.length ; i++){
+							if(this.playinglist[i].id == this.musizId){
+								if(i == this.playinglist.length-1){
+									vm.play(this.playinglist[0].id);
+									console.log(i,"我是列表循环回到了第一个");
+								}else{
+									vm.play(this.playinglist[i+1].id);
+									console.log(i,"我是列表循环下一个");
+								}
+							}
+						}
+					}else if(this.playmusizmode == 2){
+					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
+					vm.play(this.playinglist[n].id);
+					}else{
+						document.getElementById("YingYue").load();
+					}
+				}
+			},
+			/*播放上一首*/
+			playback:function(){
+				if(this.playmusizmode == 2){
+					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
+					play(this.playinglist[n].id);
+				}else{
+					for(let i = 0 ; i<this.playinglist.length ; i++){
+						if(this.playinglist[i].id == this.musizId){
+							if(i == 0){
+								vm.play(this.playinglist[this.playinglist.length-1].id);
+							}else{
+								vm.play(this.playinglist[i-1].id);
+							}
+						}
+					}
+				}
+			},
+			/*播放下一首*/
+			playnext:function(){
+				if(this.playmusizmode == 2){
+					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
+					vm.play(this.playinglist[n].id);
+				}else{
+					for(let i = 0 ; i<this.playinglist.length ; i++){
+						if(this.playinglist[i].id == this.musizId){
+							if(i == this.playinglist.length-1){
+								vm.play(this.playinglist[0].id);
+							}else{
+								vm.play(this.playinglist[i].id);
+							}
+						}
+					}
+				}
 			}
+		},
+		mounted:function() {
+			this.gexingtuijian();
 		},
 });
 /*
@@ -801,11 +974,3 @@ axios.get("https://autumnfish.cn",{
 	console.log(response);
 },function(err){})
 */
-
-var swiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
-        paginationClickable: '.swiper-pagination',
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        spaceBetween: 30
-    });

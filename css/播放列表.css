@@ -1,0 +1,102 @@
+.caidan{
+	font-size: 46px;
+	position: relative;
+	float: right;
+	right: 5%;
+}
+.caidan:hover{
+	cursor: pointer;
+}
+.bofanglist{
+	top: 50px;
+	position: absolute;
+	width: 24%;
+	background-color: #ffffff;
+	height: 800px;
+	left: 76%;
+	box-shadow: -1px 0 10px #b3b3b3;
+}
+.bofanglist_top{
+	width: 100%;
+	height: 15%;
+}
+.bofanglist_top_top{
+	width: 80%;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 20px;
+	text-align: center;
+	border-radius: 30px;
+	border: 1px solid #949494;
+}
+.bofanglist_top_top p{
+	line-height: 4;
+	float: left;
+	width: 50%;
+	height: 100%;
+	border-radius: 30px;
+}
+.bofanglist_top_top p:hover{
+	background-color: #cecece;
+}
+.bofanglist_top_bottom{
+	width: 100%;
+	height: 60px;
+	font-size: 20px;
+	border-bottom: 1px solid #bebebe;
+}
+.bofanglist_top_number{
+	float: left;
+	margin-left: 20px;
+}
+.bofanglist_top_clear{
+	float: right;
+	margin-right: 20px;
+}
+.bofanglist_body{
+	width: 100%;
+	height: 75%;
+	max-height: 75%;
+	overflow: auto;
+}
+.bofanglist_body_table{
+	width: 100%;
+}
+.bofanglist_body_tr td{
+	font-size: 16px;
+	height: 30px;
+}
+.bofanglist_body_tr td:nth-child(1){
+	text-align: center;
+	width: 8%;
+}
+.bofanglist_body_tr td:nth-child(2){
+	width: 5%;
+}
+.bofanglist_body_tr td:nth-child(3){
+	width: 5em;
+}
+.bofanglist_body_tr td:nth-child(4){
+	margin-right: 13%;
+	float: right;
+	width: 8em;
+}
+.bofanglist_body_tr td:nth-child(5){
+	width: 10%;
+}
+.bofanglist_body_tr:nth-child(odd){
+	background-color: #dddddd;
+}
+.bianhui{
+	background-color: #9f9f9f;
+}
+.playingmusiz{
+	color: red;
+}
+.bofanglist_body_tr td p{
+	line-height: 2.5;
+	float: left;
+	overflow: hidden;
+	width: 100%;
+	height: 30px;
+}

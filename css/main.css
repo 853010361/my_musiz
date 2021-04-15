@@ -447,3 +447,26 @@
 			top: 60px;
 			left: 500px;
 		}
+		.musizdong{
+			position: absolute;
+			left: 73%;
+			top: 10px;
+		}
+		.musizdong span{
+			margin-left: 14px;
+			font-size: 30px;
+			border: 1px solid #000000;
+			border-radius: 50%;
+		}
+		.moshi{
+			position: absolute;
+			left: 83%;
+			top: 12px;
+			text-align: center;
+		}
+		.moshi span{
+			font-size: 20px;
+		}
+		.moshi span{
+			cursor: pointer;
+		}
