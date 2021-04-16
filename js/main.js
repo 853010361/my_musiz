@@ -162,7 +162,7 @@ var vm =new Vue({
 			axios.get("https://autumnfish.cn/song/url?id="+index)
 			.then(function(response){
 				if(response.data.data[0].url==null){
-					window.alert("歌曲不存在");
+
 				}else{
 					that.musiz=response.data.data[0].url;
 					axios.get("https://autumnfish.cn/song/detail?ids="+index)
@@ -172,6 +172,24 @@ var vm =new Vue({
 						that.musizId = index;
 						vm.opengechiindex();
 						vm.gequpinglunget();
+						/*控制播放跳转*/
+						if(that.playinglist.length <= 15){
+							
+						}else if(that.playinglist.length > 15){
+							var abc = 0;
+							for(let i = 0 ; i<that.playinglist.length ; i++){
+								if(that.playinglist[i].id == that.musizId){
+									abc = i;
+								}
+							}
+							if(abc <= 7){
+								document.querySelector(".bofanglist_body").scrollTop = 0;
+							}else if(that.playinglist.length - abc <=7){
+								document.querySelector(".bofanglist_body").scrollTop = (that.playinglist.length - 15) * 40;
+							}else{
+								document.querySelector(".bofanglist_body").scrollTop = (abc - 7) * 40;
+							}
+						}
 					},function(err){})
 				}
 			},function(err){})
@@ -179,7 +197,7 @@ var vm =new Vue({
 		/*搜索音乐*/
 		searchMusiz:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.loadingerr=false;
 			this.personIndexSwitch=false;
 			this.SearchIndexSwitch=true;
@@ -189,20 +207,24 @@ var vm =new Vue({
 			this.gedanIndexSwitch=false;
 			this.leftgo=0;
 			this.gechiindexswitch=false;
+			that.SearchIndexSwitch=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.songs == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.list=response.data.result.songs;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
 				that.loadingerr=true;
+				that.loadingindex=false;
+				that.SearchIndexSwitch=true;
 			});
 			that.SearchPerson2.splice(0,that.SearchPerson2.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
@@ -220,23 +242,28 @@ var vm =new Vue({
 		/*搜索歌手*/
 		SearchPerson:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=100&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.artists == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchPerson2=response.data.result.artists;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
+				that.loadingindex=false;
 				that.loadingerr=true;
+				that.SearchIndexSwitch=true;
 			});
 			that.list.splice(0,that.list.length);
 			that.SearchZhuanji2.splice(0,that.SearchZhuanji2.length);
@@ -251,22 +278,27 @@ var vm =new Vue({
 		/*搜索专辑*/
 		SearchZhuanji:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=10&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.albums == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchZhuanji2=response.data.result.albums;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
+				that.loadingindex=false;
+				that.SearchIndexSwitch=true;
 				that.loadingerr=true;
 			});
 			that.list.splice(0,that.list.length);
@@ -281,21 +313,26 @@ var vm =new Vue({
 		/*搜索视频*/
 		SearchMV:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1014&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.videos == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchMV2=response.data.result.videos;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 		},function(err){
-			that.loading=false;
+			that.loadingindex=false;
+			that.SearchIndexSwitch=true;
 			that.loadingerr=true;
 		});
 		that.list.splice(0,that.list.length);
@@ -310,22 +347,27 @@ var vm =new Vue({
 		/*搜索歌单*/
 		SearchGedan:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1000&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.playlists == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchGedan2=response.data.result.playlists;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
+				that.loadingindex=false;
+				that.SearchIndexSwitch=true;
 				that.loadingerr=true;
 			});
 		that.list.splice(0,that.list.length);
@@ -340,22 +382,27 @@ var vm =new Vue({
 		/*搜索歌词*/
 		SearchGechi:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1006&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.songs == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchGechi2=response.data.result.songs;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
+				that.loadingindex=false;
+				that.SearchIndexSwitch=true;
 				that.loadingerr=true;
 			});
 			that.list.splice(0,that.list.length);
@@ -378,22 +425,27 @@ var vm =new Vue({
 		/*搜索电台*/
 		SearchDianTai:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1009&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.djRadios == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchDianTai2=response.data.result.djRadios;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
+				that.loadingindex=false;
+				that.SearchIndexSwitch=true;
 				that.loadingerr=true;
 			})
 			that.list.splice(0,that.list.length);
@@ -408,22 +460,27 @@ var vm =new Vue({
 		/*搜索用户*/
 		SearchName:function(){
 			var that=this;
-			this.loading=true;
+			that.loadingindex=true;
 			this.searchnull=false;
 			this.leftgo=0;
+			that.SearchIndexSwitch=false;
+			this.loadingerr=false;
 			
 			axios.get("https://autumnfish.cn/search?limit=100&type=1004&keywords="+this.title)
 			.then(function(response){
 				if(response.data.result.mvs == undefined){
-					that.loading=false;
+					that.loadingindex=false;
 					that.searchnull=true;
+					that.SearchIndexSwitch=true;
 				}else{
 					that.SearchName2=response.data.result.mvs;
-					that.loading=false;
+					that.loadingindex=false;
+					that.SearchIndexSwitch=true;
 				}
 				
 			},function(err){
-				that.loading=false;
+				that.loadingindex=false;
+				that.SearchIndexSwitch=true;
 				that.loadingerr=true;
 			});
 			that.list.splice(0,that.list.length);
@@ -446,26 +503,22 @@ var vm =new Vue({
 			axios.get("https://autumnfish.cn/video/url?id="+MVid)
 			.then(function(response){
 				that.MVDiZhi=response.data.urls[0].url;
-				// console.log(that.MVDiZhi);
 			},function(err){})
 			/*视频详细信息*/
 			axios.get("https://autumnfish.cn/video/detail?id="+MVid)
 			.then(function(response){
 				that.MVneilong=response.data.data;
 				that.MVtitle=that.MVneilong.creator.nickname;
-				// console.log(that.MVneilong);
 			},function(err){})
 			/*视频热门评论*/
 			axios.get("https://autumnfish.cn/comment/new?&sortType=2&type=5&id="+MVid)
 			.then(function(response){
 				that.MVPinlunhot=response.data.data.comments;
-				// console.log(that.MVPinlunhot);
 			},function(err){})
 			/*视频最新评论*/
 			axios.get("https://autumnfish.cn/comment/new?&sortType=3&type=5&id="+MVid)
 			.then(function(response){
 				that.MVPinlunNew=response.data.data.comments;
-				// console.log(that.MVPinlunNew);
 			},function(err){})
 			/*相关视频*/
 			axios.get("https://autumnfish.cn/related/allvideo?id="+MVid)
@@ -488,6 +541,7 @@ var vm =new Vue({
 			.then(function(response){
 				if(response.data.data.url==null){
 					window.alert("视频不存在");
+					that.loadingindex=false;
 				}else{
 					that.MVDiZhi=response.data.data.url;
 					that.loadingindex=false;
@@ -551,7 +605,6 @@ var vm =new Vue({
 					
 					that.personIndexSwitch=true;
 					that.loadingindex=false;
-					console.log(that.PersonZhuanJi);
 				}))
 			},function(err){})
 			
@@ -614,6 +667,7 @@ var vm =new Vue({
 			})
 			.then(function(response){
 				that.zhuanjimain=response;
+				that.loadingindex=false;
 				console.log(that.zhuanjimain);
 			},function(err){})
 			/*获取专辑评论数*/
@@ -636,7 +690,7 @@ var vm =new Vue({
 				that.zhuanjipinlunlist=response.data;
 			},function(err){})
 			
-			this.loadingindex=false;
+			
 		},
 		/*打开歌单页面*/
 		gedanget:function(id){
@@ -667,7 +721,6 @@ var vm =new Vue({
 					that.gedanmusizlist = arguments;
 					that.loadingindex=false;
 					that.gedanIndexSwitch=true;
-					console.log(that.gedanmusizlist);
 				}))
 			},function(err){})
 			
@@ -791,6 +844,9 @@ var vm =new Vue({
 						if(time<this.gechitime[j+1] && time>this.gechitime[j]){
 							this.gechinumber=j;
 							ul.style.transform = "translateY(" + -70*j + "px)";
+						}else if(time > this.gechitime[j]){
+							this.gechinumber = j;
+							ul.style.transform = "translateY(" + -70*j + "px)";
 						}
 					}
 				}
@@ -826,7 +882,7 @@ var vm =new Vue({
 				axios.get("https://autumnfish.cn/song/url?id="+id)
 				.then(function(response){
 					if(response.data.data[0].url==null){
-
+						window.alert("歌曲不存在");
 					}else{
 						/*歌曲存在开始判断是否在列表中*/
 						for(let i=0;i<that.bofanglist.length;i++){
@@ -855,7 +911,7 @@ var vm =new Vue({
 				axios.get("https://autumnfish.cn/song/url?id="+id)
 				.then(function(response){
 					if(response.data.data[0].url==null){
-						window.alert("歌曲不存在");
+
 					}else{
 						for(let i=0;i<that.lishilist.length;i++){
 							if(that.lishilist[i].id == id && that.lishilist[i].gname == gname && that.lishilist[i].pname == pname){
@@ -874,8 +930,10 @@ var vm =new Vue({
 				this.playlistindexswitch =!this.playlistindexswitch;
 				if(this.bofangandlishi == 0){
 					this.playinglist=this.bofanglist;
+					vm.playlistgo();
 				}else{
 					this.playinglist=this.lishilist;
+					vm.playlistgo();
 				}
 			},
 			/*删除单独歌曲*/
@@ -920,8 +978,12 @@ var vm =new Vue({
 							}
 						}
 					}else if(this.playmusizmode == 2){
-					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
-					vm.play(this.playinglist[n].id);
+						var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
+						if(this.playinglist[n].id == this.musizId){
+							document.getElementById("YingYue").load();
+						}else{
+							vm.play(this.playinglist[n].id);
+						}
 					}else{
 						document.getElementById("YingYue").load();
 					}
@@ -933,7 +995,11 @@ var vm =new Vue({
 					vm.opengechiindex();
 					vm.gequpinglunget();
 					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
-					play(this.playinglist[n].id);
+					if(this.playinglist[n].id == this.musizId){
+						document.getElementById("YingYue").load();
+					}else{
+						vm.play(this.playinglist[n].id);
+					}
 				}else{
 					for(let i = 0 ; i<this.playinglist.length ; i++){
 						if(this.playinglist[i].id == this.musizId){
@@ -952,7 +1018,11 @@ var vm =new Vue({
 				vm.gequpinglunget();
 				if(this.playmusizmode == 2){
 					var n = Math.floor(Math.random() * this.playinglist.length + 1)-1;
-					vm.play(this.playinglist[n].id);
+					if(this.playinglist[n].id == this.musizId){
+						document.getElementById("YingYue").load();
+					}else{
+						vm.play(this.playinglist[n].id);
+					}
 				}else{
 					for(let i = 0 ; i<this.playinglist.length ; i++){
 						if(this.playinglist[i].id == this.musizId){
@@ -962,6 +1032,26 @@ var vm =new Vue({
 								vm.play(this.playinglist[i+1].id);
 							}
 						}
+					}
+				}
+			},
+			/*用于锁定播放列表*/
+			playlistgo:function(){
+				if(this.playinglist.length <= 15){
+					
+				}else if(this.playinglist.length > 15){
+					var abc = 0;
+					for(let i = 0 ; i<this.playinglist.length ; i++){
+						if(this.playinglist[i].id == this.musizId){
+							abc = i;
+						}
+					}
+					if(abc <= 7){
+						document.querySelector(".bofanglist_body").scrollTop = 0;
+					}else if(this.playinglist.length - abc <=7){
+						document.querySelector(".bofanglist_body").scrollTop = (this.playinglist.length - 15) * 40;
+					}else{
+						document.querySelector(".bofanglist_body").scrollTop = (abc - 7) * 40;
 					}
 				}
 			}
