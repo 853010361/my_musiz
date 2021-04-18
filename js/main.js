@@ -1054,6 +1054,16 @@ var vm =new Vue({
 						document.querySelector(".bofanglist_body").scrollTop = (abc - 7) * 40;
 					}
 				}
+			},
+			/*跳转首页*/
+			mainindex:function(){
+				this.SearchIndexSwitch=false;
+				this.personIndexSwitch=false;
+				this.gedanIndexSwitch=false;
+				this.zhuanjiIndexSwitch=false;
+				this.gedanIndexSwitch=false;
+				this.gechiindexswitch=false;
+				this.leftgo = 1;
 			}
 		},
 		mounted:function() {
