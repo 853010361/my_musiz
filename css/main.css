@@ -4,7 +4,7 @@
 			width: 100%;
 		}
 		.log{
-			position: relative;
+			position: absolute;
 			top: 5px;
 			left: 20px;
 			width: 35px;
@@ -21,15 +21,15 @@
 		}
 		
 		.search{
-			background-color: #ff007f;
-			position: relative;
-			width: 200px;
+			background-color: #ee4158;
+			position: absolute;
+			width: 40%;
 			height: 35px;
-			top: -60px;
-			left: 300px;
+			left: 25%;
+			top: 6px;
 		}
 		.search_left{
-			background-color: #ff007f;
+			background-color: #ee4158;
 			width: 10px;
 			height: 35px;
 			position: relative;
@@ -38,7 +38,7 @@
 			border-bottom-left-radius: 10px;
 		}
 		.search_right{
-			background-color: #ff007f;
+			background-color: #ee4158;
 			width: 10px;
 			height: 35px;
 			position: relative;
@@ -50,10 +50,9 @@
 		}
 		.log_wenzi{
 			position: relative;
-			margin: 0 0 0 0;
+			left: 4%;
+			top: 6px;
 			width: 100px;
-			left: 80px;
-			top: -30px;
 			font-family: "微软雅黑";
 			font-size: 20px;
 			color: #fff;
@@ -68,13 +67,14 @@
 			top: -23px;
 		}
 		.search_input{
+			color: white;
 			position: relative;
 			top: -25px;
-			width: 150px;
+			width: 90%;
 			border-radius: 20px;
 			outline: none;
 			border: 0;
-			background-color: #ff007f;
+			background-color: #ee4158;
 		}
 		.musiz_body{
 			width: 100%;
@@ -176,6 +176,9 @@
 			float: left;
 			width: 100%;
 		}
+		.right_musiz_tr td:nth-child(1){
+			text-align: center;
+		}
 		.right_musiz_tr:nth-child(odd){
 			background-color: #d8d8d8;
 		}
@@ -210,7 +213,9 @@
 		.gexingtuijian_gedan_img:hover,
 		.zuixinmusiz_img:hover,
 		.dujiafangsong_li:hover,
-		.button_img:hover{
+		.button_img:hover,
+		.log:hover,
+		.log_wenzi:hover{
 			cursor: pointer;
 		}
 		.right_musiz_li{
@@ -270,13 +275,13 @@
 		}
 		.video_div{
 			margin-top: 20px;
-			width: 85%;
+			width: 90%;
 			height: 600px;
 		}
 		.video_video{
-			margin-left: 20px;
-			width: 100%;
-			height: 100%;
+			margin-left: 20%;
+			width: 640px;
+			height: 480px;
 			outline: none;
 		}
 		.MV_left{
@@ -289,7 +294,7 @@
 			position: absolute;
 			background-color: #ffffff;
 			width: 100%;
-			height: 800px;
+			height: 100%;
 			max-height: 800px;
 			overflow: auto;
 		}
@@ -454,7 +459,7 @@
 		}
 		.musizdong span{
 			margin-left: 14px;
-			font-size: 30px;
+			font-size: 20px;
 			border: 1px solid #000000;
 			border-radius: 50%;
 		}
@@ -465,7 +470,7 @@
 			text-align: center;
 		}
 		.moshi span{
-			font-size: 20px;
+			font-size: 10px;
 		}
 		.moshi span{
 			cursor: pointer;

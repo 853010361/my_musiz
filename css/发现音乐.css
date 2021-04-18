@@ -27,7 +27,8 @@
 		        align-items: center;
 		    }
 			.swiper-slide img{
-				width: 80%;
+				width: 100%;
+				height: 100%;
 			}
 			.swiper-slide img:hover{
 				cursor: pointer;
@@ -94,9 +95,10 @@
 }
 .zuixinmusiz_div{
 	position: relative;
-	left: -60px;
 	float: left;
+	right: 8%;
 	font-size: 12px;
+	width: 40%;
 	max-width: 40%;
 	max-height: 100%;
 }
